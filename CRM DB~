@@ -1,0 +1,25 @@
+Done
+******
+Level (id, title)
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+Employer (id, name ....., level_id)
+Lines (id, mr_id, title, static_name)
+Products (id, title, static_name, line_id, quantity)
+Gifts (id, title, static_name)
+Product Target (id, date, employer_id, target(json))
+doctors (id, mr_id, .....)
+area (id, static_name, title)
+torritory (id, area_id, title, static_name)
+classes ( id, title, static_name, visits_number)
+plans (id, mr_id, date , doctors(json) )
+request(id, doctor_id, mr_id, title, static_name)
+follow_up (id, doctor_id, mr_id, title, static_name)
+feedback (id, doctor_id, mr_id, title, static_name)
+reports (id, mr_id, doctors, product_id, gift_id, request_id, follow_up_id, feedback_id)
+Sales (id, mr_id, type, date, product_sales(json))
+coverage (id, line_id, coverage_percentage)
+tasks(id, title,text, static_nam, employer_id)
+announcements (id, title, text)
+message (id, employer_one, employer_two, timestamps)
+message_reply (id, message_id, employer_id, reply, timestamps)

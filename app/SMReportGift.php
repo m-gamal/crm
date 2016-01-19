@@ -1,0 +1,38 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class SMReportGift extends Model
+{
+    /**
+     * The database table used by the model.
+     *
+     * @var string
+     */
+    protected $table = 'sm_report_gift';
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = true;
+
+    /**
+     * The Report belongs to the Gift
+     */
+    public function report()
+    {
+        return $this->belongsTo('App\AMReport');
+    }
+
+    /**
+     * The Gift belongs to report
+     */
+    public function gift()
+    {
+        return $this->belongsTo('App\Gift');
+    }
+}

@@ -1,0 +1,12 @@
+.widget-simple .widget-content small{
+	font-size: 17px;
+}
+
+.nav.navbar-nav-custom > li > a .label-indicator{
+	border-radius: 50%;
+	top: 8px;
+}
+
+.sidebar-user-name{
+	margin-top: 23px;
+}
