@@ -136,4 +136,18 @@ class ExportController extends Controller
                 });
             })->export($type);
     }
+
+    public function customerSearch($type)
+    {
+        $customers                  =   \Session::get('customers');
+
+        \Excel::create('customer-search',
+            function($excel)use($customers)  {
+                $excel->sheet('customers', function($sheet) use($customers) {
+                    $sheet->setAllBorders('thin');
+                    $sheet->loadView('admin.export.search_customer_result')
+                        ->with('customers', $customers);
+                });
+            })->export($type);
+    }
 }

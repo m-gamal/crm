@@ -1,4 +1,4 @@
-@extends('admin.layouts.master')
+@extends('sm.layouts.master')
 @section('title')
 All Request
 @endsection
@@ -7,7 +7,7 @@ All Request
     <!-- Begin Breadcrumb -->
     <ul class="breadcrumb breadcrumb-top">
         <li><a href="{{URL::route('/')}}">Dashboard</a></li>
-        <li><a href="{{URL::route('reports')}}">All Request</a></li>
+        <li><a href="{{URL::route('smReports')}}">All Request</a></li>
     </ul>
     <!-- END Breadcrumb -->
 

@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 @section('title')
-    Coverage Search
+    Customer Search
 @endsection
 
 @section('content')

@@ -33,11 +33,11 @@ class ReportController extends Controller
 {
     public function listAll()
     {
-        $employees      = Employee::select('id')->where('manager_id', 4)->get(); //am_session
+        $employees      = Employee::select('id')->where('manager_id', \Auth::user()->id)->get();
         $MRReports      = Report::whereIn('mr_id', $employees)->get();
 
 
-        $yourReports    =   AMReport::where('am_id', 4)->get(); // am_session
+        $yourReports    =   AMReport::where('am_id', \Auth::user()->id)->get();
         $dataView 	= [
             'MRReports'	    =>  $MRReports,
             'yourReports'   =>  $yourReports
@@ -135,7 +135,7 @@ class ReportController extends Controller
 
     public function MRSearch()
     {
-        $MRs        =   Employee::where('manager_id', 4)->get(); // am_session
+        $MRs        =   Employee::where('manager_id', \Auth::user()->id)->get();
         $products   =   Product::all();
         $gifts      =   Gift::all();
         $doctors    =   Customer::all();
@@ -231,13 +231,13 @@ class ReportController extends Controller
 
     public function create($doctorId = NULL)
     {
-        $employees          =   Employee::select('id')->where('manager_id', 4)->get(); //am_session
+        $employees          =   Employee::select('id')->where('manager_id', \Auth::user()->id)->get();
         $description_names  =   Customer::distinct()->select('description_name')
                                         ->whereIn('mr_id', $employees)->get();
 
         $doctors            =   Customer::whereIn('mr_id', $employees)->get();
 
-        $employeesLines     = Employee::select('line_id')->where('manager_id', 4)->get(); //am_session
+        $employeesLines     = Employee::select('line_id')->where('manager_id', \Auth::user()->id)->get();
 
         $products           =   Product::where('line_id', $employeesLines)->get();
 
@@ -274,7 +274,7 @@ class ReportController extends Controller
             }
         }
 
-        $report->am_id                      =   '4'; // am_session
+        $report->am_id                      =   \Auth::user()->id;
         $report->month                      =   $request->month.'-'.$request->year;
         $report->date                       =   $request->date;
         $report->doctor_id                  =   $request->doctor;
@@ -402,58 +402,58 @@ class ReportController extends Controller
         return view('am.report.single', $dataView);
     }
 
-//    public function listAllPendingServicesRequests()
-//    {
-//        $employees = Employee::select('id')->where('manager_id', 4)->get(); //am_session
-//
-//        $pendingServicesRequests =  ServiceRequest::pending()->where('emp_id', $employees)->get();
-//
-//        $dataView 	= [
-//            'pendingServicesRequests'	=>	 $pendingServicesRequests
-//        ];
-//
-//        return view('am.service_request.pending', $dataView);
-//    }
-//
-//    public function approvePendingServiceRequest($id)
-//    {
-//        $serviceRequest   =   ServiceRequest::findOrFail($id);
-//        $serviceRequest->approved = 1;
-//        try {
-//            $serviceRequest->save();
-//            return redirect()->back()->with('message','Service Request has been approved successfully !');
-//        } catch (ParseException $ex) {
-//            echo 'Failed to approve service request , with error message: ' . $ex->getMessage();
-//        }
-//    }
-//
-//    public function declinePendingServiceRequest($id)
-//    {
-//        $serviceRequest   =   ServiceRequest::findOrFail($id);
-//        $serviceRequest->approved = 0;
-//        try {
-//            $serviceRequest->save();
-//            return redirect()->back()->with('message','Service Request has been declined successfully !');
-//        } catch (ParseException $ex) {
-//            echo 'Failed to decline service request , with error message: ' . $ex->getMessage();
-//        }
-//    }
-//
-//    public function listAllPendingLeaveRequests()
-//    {
-//        $employees = Employee::select('id')->where('manager_id', 4)->get(); //am_session
-//        $pendingLeaveRequests =  LeaveRequest::pending()->where('emp_id', $employees)->get();
-//
-//        $dataView 	= [
-//            'pendingLeaveRequests'	=>	 $pendingLeaveRequests
-//        ];
-//
-//        return view('am.leave_request.pending', $dataView);
-//    }
+    public function listAllPendingServicesRequests()
+    {
+        $employees = Employee::select('id')->where('manager_id', \Auth::user()->id)->get();
+
+        $pendingServicesRequests =  ServiceRequest::pending()->whereIn('mr_id', $employees)->get();
+
+        $dataView 	= [
+            'pendingServicesRequests'	=>	 $pendingServicesRequests
+        ];
+
+        return view('am.service_request.pending', $dataView);
+    }
+
+    public function approvePendingServiceRequest($id)
+    {
+        $serviceRequest   =   ServiceRequest::findOrFail($id);
+        $serviceRequest->approved = 1;
+        try {
+            $serviceRequest->save();
+            return redirect()->back()->with('message','Service Request has been approved successfully !');
+        } catch (ParseException $ex) {
+            echo 'Failed to approve service request , with error message: ' . $ex->getMessage();
+        }
+    }
+
+    public function declinePendingServiceRequest($id)
+    {
+        $serviceRequest   =   ServiceRequest::findOrFail($id);
+        $serviceRequest->approved = 0;
+        try {
+            $serviceRequest->save();
+            return redirect()->back()->with('message','Service Request has been declined successfully !');
+        } catch (ParseException $ex) {
+            echo 'Failed to decline service request , with error message: ' . $ex->getMessage();
+        }
+    }
+
+    public function listAllPendingLeaveRequests()
+    {
+        $employees = Employee::select('id')->where('manager_id', \Auth::user()->id)->get();
+        $pendingLeaveRequests =  LeaveRequest::pending()->whereIn('mr_id', $employees)->get();
+
+        $dataView 	= [
+            'pendingLeaveRequests'	=>	 $pendingLeaveRequests
+        ];
+
+        return view('am.leave_request.pending', $dataView);
+    }
 
     public function approvePendingLeaveRequest($id)
     {
-        $leaveRequest   =   AMLeaveRequest::findOrFail($id);
+        $leaveRequest   =   LeaveRequest::findOrFail($id);
         $leaveRequest->approved = 1;
         try {
             $leaveRequest->save();
@@ -465,7 +465,7 @@ class ReportController extends Controller
 
     public function declinePendingLeaveRequest($id)
     {
-        $leaveRequest   =   AMLeaveRequest::findOrFail($id);
+        $leaveRequest   =   LeaveRequest::findOrFail($id);
         $leaveRequest->approved = 0;
         try {
             $leaveRequest->save();
@@ -484,7 +484,7 @@ class ReportController extends Controller
     {
         $expenseReport   =   new AMExpenseReport();
 
-        $expenseReport->am_id              = '4'; // am_session
+        $expenseReport->am_id               = \Auth::user()->id;
         $expenseReport->month               = $request->month.'-'.$request->month;
         $expenseReport->serial              = $request->serial;
         $expenseReport->date                = $request->date;
@@ -512,7 +512,7 @@ class ReportController extends Controller
 
     public function listAllExpensesReports()
     {
-        $expensesReports =  AMExpenseReport::where('am_id', 4)->get();
+        $expensesReports =  AMExpenseReport::where('am_id', \Auth::user()->id)->get();
         $dataView 	= [
             'expensesReports'	=>	 $expensesReports
         ];
@@ -522,7 +522,7 @@ class ReportController extends Controller
 
     public function listAllLeaveRequests()
     {
-        $leaveRequests = AMLeaveRequest::where('am_id', 4)->get(); // mr_session
+        $leaveRequests = AMLeaveRequest::where('am_id', \Auth::user()->id)->get();
         $dataView 	= [
             'leaveRequests'	=>	 $leaveRequests
         ];
@@ -538,7 +538,7 @@ class ReportController extends Controller
     {
         $leaveRequest   =   new AMLeaveRequest();
 
-        $leaveRequest->am_id       = '4'; // mr_session
+        $leaveRequest->am_id        = \Auth::user()->id;
         $leaveRequest->month        = $request->month.'-'.$request->year;
         $leaveRequest->date         = $request->date;
         $leaveRequest->reason       = $request->reason;
@@ -549,8 +549,8 @@ class ReportController extends Controller
         try {
             if ($leaveRequest->save()) {
                 $extension = $request->file('docs')->getClientOriginalExtension();
-                $request->file('docs')//am_session
-                ->move(public_path('uploads/leave_requests/4/' . $leaveRequest->month . '/'), $leaveRequest->date . '.' . $extension);
+                $request->file('docs')
+                ->move(public_path('uploads/leave_requests/'.\Auth::user()->id .'/'. $leaveRequest->month . '/'), $leaveRequest->date . '.' . $extension);
             }
             return redirect()->back()->with('message','Leave Request has been sent to your managers successfully !');
         } catch (ParseException $ex) {
@@ -560,7 +560,7 @@ class ReportController extends Controller
 
     public function listAllServicesRequests()
     {
-        $servicesRequests = AMServiceRequest::where('am_id', 4)->get(); // mr_session
+        $servicesRequests = AMServiceRequest::where('am_id', \Auth::user()->id)->get();
         $dataView 	= [
             'servicesRequests'	=>	 $servicesRequests
         ];
@@ -576,7 +576,7 @@ class ReportController extends Controller
     {
         $serviceRequest   =   new AMServiceRequest();
 
-        $serviceRequest->am_id         = '4'; // mr_session
+        $serviceRequest->am_id          = \Auth::user()->id;
         $serviceRequest->month          = $request->month.'-'.$request->year;
         $serviceRequest->date           = $request->date;
         $serviceRequest->request_text   = $request->request_text;

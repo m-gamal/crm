@@ -69,6 +69,6 @@ All Employees
 
 @section('custom_footer_scripts')
 <script>$('#employee').addClass('active');</script>
-<script src="js/pages/tablesDatatables.js"></script>
+<script src="{{URL::asset('js/pages/tablesDatatables.js')}}"></script>
 <script>$(function(){ TablesDatatables.init(); });</script>
 @endsection

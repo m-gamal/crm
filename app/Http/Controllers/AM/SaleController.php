@@ -18,10 +18,10 @@ class SaleController extends Controller
 
     public function search()
     {
-        $employeesLines     = Employee::select('line_id')->where('manager_id', 4)->get(); //am_session
+        $employeesLines     = Employee::select('line_id')->where('manager_id', \Auth::user()->id)->get();
         $products           =   Product::where('line_id', $employeesLines)->get();
 
-        $MRs        =   Employee::where('manager_id', 4)->get(); // am_session
+        $MRs        =   Employee::where('manager_id', \Auth::user()->id)->get();
 
         $dataView   =   [
             'products'  =>  $products,
@@ -39,7 +39,6 @@ class SaleController extends Controller
         $products       =   $request->products;
         $MRs            =   $request->mrs;
 
-        // mr_session
         $allSearchedReport = Report::select('sold_products')
             ->where('date', '>=', $from)
             ->where('date', '<=', $to)

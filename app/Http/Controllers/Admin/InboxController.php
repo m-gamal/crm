@@ -66,7 +66,7 @@ class InboxController extends Controller
     {
         $sentMessages   =   Message::where('sender', \Auth::user()->id)->get();
         $dataView       =   [
-        'sentMessages'  =>  $sentMessages
+            'sentMessages'  =>  $sentMessages
         ];
         return view('admin.inbox.sent', $dataView);
     }

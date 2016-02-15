@@ -17,6 +17,7 @@ class CreateTerritoryTable extends Migration
             $table->string('name');
             $table->integer('area_id')->unsigned();
             $table->integer('mr_id')->unsigned();
+            $table->text('description');
             $table->timestamps();
         });
 

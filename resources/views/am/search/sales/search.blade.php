@@ -95,7 +95,7 @@
                         </select>
                         <span class="help-block">
                             <i class="fa fa-info-circle"></i>
-                            <strong>You can search with multiple doctors</strong>
+                            <strong>You can search with multiple medical reps</strong>
                         </span>
                         @if($errors->has('mrs'))
                             <div class="alert alert-danger">

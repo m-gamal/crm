@@ -37,7 +37,6 @@ class LineController extends Controller
 
         foreach($doctors as $singleDoctor)
         {
-            // mr_session
             $actualVisits [$singleDoctor->id] = Report::where('mr_id', $mr)
                 ->where('month', $currentMonth)
                 ->where('doctor_id', $singleDoctor->id)
@@ -120,10 +119,9 @@ class LineController extends Controller
 
     public function achievement()
     {
-        $AMIds      =   Employee::select('id')->where('manager_id', 1)->get();
-        $MRs        =   Employee::whereIn('manager_id', $AMIds)->get(); // am_session
+        $AMIds      =   Employee::select('id')->where('manager_id', \Auth::user()->id)->get();
+        $MRs        =   Employee::whereIn('manager_id', $AMIds)->get();
         $dataView   =   [
-            // am_session
             'MRs'       =>  $MRs
         ];
         return view('sm.line.history.search', $dataView);

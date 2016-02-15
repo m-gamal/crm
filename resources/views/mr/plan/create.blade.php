@@ -68,7 +68,7 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label">Date</label>
                         <div class="col-md-10">
-                            <input type="text" name="date" class="form-control input-datepicker" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd">
+                            <input type="text" name="date" id="visit_date" class="form-control" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy">
                             @if($errors->has('date'))
                                 <div class="alert alert-danger">
                                     <i class="fa fa-warning"></i>
@@ -93,6 +93,18 @@
                             @endif
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Comment</label>
+                        <div class="col-md-10">
+                            <textarea name="comment" rows="5" class="form-control"></textarea>
+                            @if($errors->has('comment'))
+                                <div class="alert alert-danger">
+                                    <i class="fa fa-warning"></i>
+                                    <strong>Error :</strong> {{$errors->first('comment')}}
+                                </div>
+                            @endif
+                        </div>
+                    </div>
                     <div class="form-group form-actions">
                         <div class="col-md-8 col-md-offset-4">
                             <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-angle-right"></i> Submit</button>
@@ -110,4 +122,9 @@
 
 @section('custom_footer_scripts')
     <script>$('#plan').addClass('active');</script>
+    <script>
+        $(function () {
+            $('#visit_date').datepicker({startDate: '1d'});
+        });
+    </script>
 @endsection

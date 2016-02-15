@@ -7,14 +7,18 @@
             <div class="sidebar-section sidebar-user clearfix sidebar-nav-mini-hide">
                 <div class="sidebar-user-avatar">
                     <a href="#">
-                        <img src="{{URL::asset('img/placeholders/avatars/avatar2.jpg')}}" alt="avatar">
+                        @if(\Auth::user()->id)
+                        <img src="{{URL::asset('img/avatar/'.\Auth::user()->id)}}" alt="avatar">
+                        @else
+                            <img src="{{URL::asset('img/placeholders/avatars/avatar2.jpg')}}" alt="avatar">
+                        @endif
                     </a>
                 </div>
-                <div class="sidebar-user-name">MR</div>
+                <div class="sidebar-user-name">{{\Auth::user()->name}}</div>
                 <div class="sidebar-user-links">
-                    <a href="#" data-toggle="tooltip" data-placement="bottom" title="Messages"><i class="gi gi-envelope"></i></a>
-                    <a href="javascript:void(0)" class="enable-tooltip" data-placement="bottom" title="Settings" onclick="$('#modal-user-settings').modal('show');"><i class="gi gi-cogwheel"></i></a>
-                    <a href="#" data-toggle="tooltip" data-placement="bottom" title="Logout"><i class="gi gi-exit"></i></a>
+                    <a href="{{URL::route('mrProfile')}}" data-toggle="tooltip" data-placement="bottom" title="Edit Profile"><i class="fa fa-user"></i></a>
+                    <a href="{{URL::route('mrInbox')}}" data-toggle="tooltip" data-placement="bottom" title="Messages"><i class="gi gi-envelope"></i></a>
+                    <a href="{{URL::route('logout')}}" data-toggle="tooltip" data-placement="bottom" title="Logout"><i class="gi gi-exit"></i></a>
                 </div>
             </div>
             <!-- END User Info -->
@@ -52,7 +56,12 @@
                         <span class="sidebar-nav-mini-hide">Reports</span>
                     </a>
                 </li>
-
+                <li id="distributor">
+                    <a href="{{URL::route('mrDistributors')}}">
+                        <i class="fa fa-street-view sidebar-nav-icon"></i>
+                        <span class="sidebar-nav-mini-hide">Distributions</span>
+                    </a>
+                </li>
                 <li id="line_history">
                     <a href="{{URL::route('lineHistory')}}">
                         <i class="fa fa-history sidebar-nav-icon"></i>

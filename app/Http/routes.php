@@ -19,9 +19,9 @@ use App\Customer;
  * Login Section
  */
 
-Route::get('admin/login', ['as'=> 'adminLogin', 'uses'  =>  'Admin\AuthController@login']);
-Route::post('admin/login', ['as'=> 'doAdminLogin', 'uses'  =>  'Admin\AuthController@doLogin']);
-Route::get('admin/logout', ['as'=> 'adminLogout', 'uses'  =>  'Admin\AuthController@doLogout']);
+Route::get('login', ['as'=> 'login', 'uses'  =>  'AuthController@login']);
+Route::post('login', ['as'=> 'doLogin', 'uses'  =>  'AuthController@doLogin']);
+Route::get('logout', ['as'=> 'logout', 'uses'  =>  'AuthController@doLogout']);
 
 
 // Admin Section
@@ -32,6 +32,7 @@ Route::group(
 ],
 function()
 {
+
 	Route::get('test-target', ['uses'  =>  'Admin\AreaController@target']);
 	Route::get('test-line', ['uses'  =>  'Admin\LineController@test']);
 	Route::get('test-export', ['uses'  =>  'Admin\DashboardController@export']);
@@ -43,6 +44,10 @@ function()
 	// Admin Dashboard
 	Route::get('dashboard', ['as'    =>  '/', 'uses'  =>  'Admin\DashboardController@index']);
 	Route::get('lock', ['as'    =>  'lock', 'uses'  =>  'Admin\DashboardController@lock']);
+
+	//Profile
+	Route::get('profile', ['as'    =>  'adminProfile', 'uses'  =>  'AuthController@editAdminProfile']);
+	Route::post('profile', ['as'    =>  'postAdminProfile', 'uses'  =>  'AuthController@postEditAdminProfile']);
 
 	// Message
 	Route::get('all-messages', ['as'    =>  'adminInbox', 'uses'  =>  'Admin\InboxController@all']);
@@ -81,6 +86,7 @@ function()
 	Route::post('delete-customer/{id}', ['as'    =>  'doDeleteCustomer', 'uses'  =>  'Admin\CustomerController@doDelete']);
 	Route::get('upload-doctors-list/{mr_id}', ['as'    =>  'uploadDoctorsList', 'uses'  =>  'Admin\CustomerController@upload']);
 	Route::post('upload-doctors-list/{mr_id}', ['as'    =>  'doUploadDoctorsList', 'uses'  =>  'Admin\CustomerController@doUpload']);
+	Route::get('export-customer-search/{type}', ['as'    =>  'adminExportCustomerSearch', 'uses'  =>  'Admin\ExportController@customerSearch']);
 
 	// Line
 	Route::get('add-line', ['as'    =>  'addLine', 'uses'  =>  'Admin\LineController@create']);
@@ -267,15 +273,34 @@ function()
 //Sales Manager Section
 Route::group(
 [
-	'prefix'	=>	'sm/'
+	'prefix'		=>	'sm/',
+	'middleware'    => 	'sm',
 ],
 function(){
-	Route::get('/', ['as'    =>  'sm', 'uses'  =>  'SM\DashboardController@index']);
+
+
+	Route::get('dashboard', ['as'    =>  'sm', 'uses'  =>  'SM\DashboardController@index']);
 	// Employees
 	Route::get('employees', ['as'    =>  'smEmployees', 'uses'  =>  'SM\EmployeeController@listAll']);
 
+	//Profile
+	Route::get('profile', ['as'    =>  'smProfile', 'uses'  =>  'AuthController@editSMProfile']);
+	Route::post('profile', ['as'    =>  'postSMProfile', 'uses'  =>  'AuthController@postEditSMProfile']);
+
+	// Messages
+	Route::get('all-messages', ['as'    =>  'smInbox', 'uses'  =>  'SM\InboxController@all']);
+	Route::get('sent-messages', ['as'    =>  'smSentMessages', 'uses'  =>  'SM\InboxController@sent']);
+	Route::get('create-message', ['as'    =>  'smCreateMessage', 'uses'  =>  'SM\InboxController@create']);
+	Route::post('create-message', ['as'    =>  'smDoCreateMessage', 'uses'  =>  'SM\InboxController@doCreate']);
+	Route::get('show-message/{id}', ['as'    =>  'smShowMessage', 'uses'  =>  'SM\InboxController@show']);
+	Route::post('reply/{id}', ['as'    =>  'smDoReply', 'uses'  =>  'SM\InboxController@doReply']);
+
 	//Customers
 	Route::get('customer', ['as'    =>  'smCustomers', 'uses'  =>  'SM\CustomerController@listAll']);
+	Route::get('search-customer', ['as'    =>  'smSearchCustomer', 'uses'  =>  'SM\CustomerController@search']);
+	Route::post('search-customer', ['as'    =>  'smDoSearchCustomer', 'uses'  =>  'SM\CustomerController@doSearch']);
+	Route::get('single-customer/{id}', ['as'    =>  'smSingleDoctor', 'uses'  =>  'SM\CustomerController@single']);
+	Route::get('export-customer-search/{type}', ['as'    =>  'smExportCustomerSearch', 'uses'  =>  'SM\Export*Controller@customerSearch']);
 
 	// Products
 	Route::get('products', ['as'    =>  'smProducts', 'uses'  =>  'SM\ProductController@listAll']);
@@ -290,7 +315,15 @@ function(){
 	Route::get('add-report/{doctorId?}', ['as'    =>  'smAddReport', 'uses'  =>  'SM\ReportController@create']);
 	Route::post('add-report', ['as'    =>  'smDoAddReport', 'uses'  =>  'SM\ReportController@doCreate']);
 	Route::get('single-mr-report/{id}', ['as'    =>  'smMRSingleReport', 'uses'  =>  'SM\ReportController@singleMR']);
+	Route::get('single-sm-report/{id}', ['as'    =>  'smAMSingleReport', 'uses'  =>  'SM\ReportController@singleAM']);
 	Route::get('single-report/{id}', ['as'    =>  'smYourSingleReport', 'uses'  =>  'SM\ReportController@singleYours']);
+	Route::get('export-single-report/{id}/{type}', ['as'    =>  'mrExportSingleReport', 'uses'  =>  'MR\ExportController@singleReport']);
+
+	// Plans
+	Route::get('plans', ['as'    =>  'smPlans', 'uses'  =>  'SM\PlanController@listAll']);
+	Route::get('ajax-plans', ['as'    =>  'smAjaxPlans', 'uses'  =>  'SM\PlanController@ajaxPlans']);
+	Route::get('add-plan', ['as'    =>  'smAddPlan', 'uses'  =>  'SM\PlanController@create']);
+	Route::post('add-plan', ['as'    =>  'smDoAddPlan', 'uses'  =>  'SM\PlanController@doCreate']);
 
 	// Plans Search
 	Route::get('plan-search', ['as'    =>  'smPlanSearch', 'uses'  =>  'SM\PlanController@search']);
@@ -302,6 +335,8 @@ function(){
 	// Report Search
 	Route::get('mr-report-search', ['as'    =>  'smMRReportSearch', 'uses'  =>  'SM\ReportController@MRSearch']);
 	Route::post('mr-report-search', ['as'    =>  'smMRDoReportSearch', 'uses'  =>  'SM\ReportController@doMRSearch']);
+	Route::get('am-report-search', ['as'    =>  'smAMReportSearch', 'uses'  =>  'SM\ReportController@AMSearch']);
+	Route::post('am-report-search', ['as'    =>  'smAMDoReportSearch', 'uses'  =>  'SM\ReportController@doAMSearch']);
 
 	// Report Search
 	Route::get('report-search', ['as'    =>  'smReportSearch', 'uses'  =>  'SM\ReportController@Search']);
@@ -347,17 +382,34 @@ function(){
 //Area Manager Section
 Route::group(
 [
-	'prefix'	=>	'am/'
+	'prefix'		=>	'am/',
+	'middleware'    => 	'am',
 ],
 function(){
-	Route::get('/', ['as'    =>  'am', 'uses'  =>  'AM\DashboardController@index']);
-    // Employees
+	Route::get('dashboard', ['as'    =>  'am', 'uses'  =>  'AM\DashboardController@index']);
+
+	//Profile
+	Route::get('profile', ['as'    =>  'amProfile', 'uses'  =>  'AuthController@editAMProfile']);
+	Route::post('profile', ['as'    =>  'postAMProfile', 'uses'  =>  'AuthController@postEditAMProfile']);
+
+	// Messages
+	Route::get('all-messages', ['as'    =>  'amInbox', 'uses'  =>  'AM\InboxController@all']);
+	Route::get('sent-messages', ['as'    =>  'amSentMessages', 'uses'  =>  'AM\InboxController@sent']);
+	Route::get('create-message', ['as'    =>  'amCreateMessage', 'uses'  =>  'AM\InboxController@create']);
+	Route::post('create-message', ['as'    =>  'amDoCreateMessage', 'uses'  =>  'AM\InboxController@doCreate']);
+	Route::get('show-message/{id}', ['as'    =>  'amShowMessage', 'uses'  =>  'AM\InboxController@show']);
+	Route::post('reply/{id}', ['as'    =>  'amDoReply', 'uses'  =>  'AM\InboxController@doReply']);
+
+	// Employees
     Route::get('employees', ['as'    =>  'amEmployees', 'uses'  =>  'AM\EmployeeController@listAll']);
 
     //Customers
     Route::get('customer', ['as'    =>  'amCustomers', 'uses'  =>  'AM\CustomerController@listAll']);
-
-    // Products
+	Route::get('single-customer/{id}', ['as'    =>  'amSingleDoctor', 'uses'  =>  'AM\CustomerController@single']);
+	Route::get('search-customer', ['as'    =>  'amSearchCustomer', 'uses'  =>  'AM\CustomerController@search']);
+	Route::post('search-customer', ['as'    =>  'amDoSearchCustomer', 'uses'  =>  'AM\CustomerController@doSearch']);
+	Route::get('export-customer-search/{type}', ['as'    =>  'amExportCustomerSearch', 'uses'  =>  'AM\ExportController@customerSearch']);
+	// Products
     Route::get('products', ['as'    =>  'amProducts', 'uses'  =>  'AM\ProductController@listAll']);
 
 	// Distributors
@@ -372,7 +424,13 @@ function(){
 	Route::get('single-mr-report/{id}', ['as'    =>  'amMRSingleReport', 'uses'  =>  'AM\ReportController@singleMR']);
 	Route::get('single-report/{id}', ['as'    =>  'amYourSingleReport', 'uses'  =>  'AM\ReportController@singleYours']);
 
-    // Plans Search
+	// Plans
+	Route::get('plans', ['as'    =>  'amPlans', 'uses'  =>  'AM\PlanController@listAll']);
+	Route::get('ajax-plans', ['as'    =>  'amAjaxPlans', 'uses'  =>  'AM\PlanController@ajaxPlans']);
+	Route::get('add-plan', ['as'    =>  'amAddPlan', 'uses'  =>  'AM\PlanController@create']);
+	Route::post('add-plan', ['as'    =>  'amDoAddPlan', 'uses'  =>  'AM\PlanController@doCreate']);
+
+	// Plans Search
     Route::get('plan-search', ['as'    =>  'amPlanSearch', 'uses'  =>  'AM\PlanController@search']);
     Route::post('plan-search', ['as'    =>  'amDoPlanSearch', 'uses'  =>  'AM\PlanController@doSearch']);
 	Route::get('pending-plans', ['as'    =>  'amPendingPlans', 'uses'  =>  'AM\PlanController@pending']);
@@ -425,16 +483,22 @@ function(){
 // Medical Rep. Section
 Route::group(
 [
-		'prefix' => 'mr'
+	'prefix' 		=> 'mr',
+	'middleware'    => 'mr',
 ],
 function()
 {
 	// Medical Rep. Dashboard
-	Route::get('/',  ['as' => 'mr', function () {
-		$coverageStats              =   Employee::coverageStats(date('M-Y'));
-		$totalProducts              =   Employee::monthlyDirectSales(date('M-Y'));
-		$monthlyReports				=	Report::where('mr_id', 3)->where('month', date('M-Y'))->get(); //mr_session
-		$doctors                    =   Customer::where('mr_id', 3)->get(); // mr_session;
+
+	Route::get('test-coverage/{id}', ['as'    =>  'specialtyCoverageStats', 'uses'  =>  'MR\LineController@specialtyCoverageStats']);
+	Route::get('test-sales/{id}/{month}', ['as'    =>  'monthlyDirectSales', 'uses'  =>  'MR\LineController@monthlyDirectSales']);
+	Route::get('test-target', ['uses'  =>  'MR\LineController@target']);
+
+	Route::get('dashboard',  ['as' => 'mr', function () {
+		$coverageStats              =   Employee::coverageStats(\Auth::user()->id, date('M-Y'));
+		$totalProducts              =   Employee::monthlyDirectSales(\Auth::user()->id, date('M-Y'));
+		$monthlyReports				=	Report::where('mr_id', \Auth::user()->id)->where('month', date('M-Y'))->get();
+		$doctors                    =   Customer::where('mr_id', \Auth::user()->id)->get();
 
 		$dataView =	[
 			'doctors'                       =>  count($doctors),
@@ -446,6 +510,21 @@ function()
 		];
 		return view('mr.index', $dataView);
     }]);
+
+	//Profile
+	Route::get('profile', ['as'    =>  'mrProfile', 'uses'  =>  'AuthController@editMRProfile']);
+	Route::post('profile', ['as'    =>  'postMRProfile', 'uses'  =>  'AuthController@postEditMRProfile']);
+
+	// Message
+	Route::get('all-messages', ['as'    =>  'mrInbox', 'uses'  =>  'MR\InboxController@all']);
+	Route::get('sent-messages', ['as'    =>  'mrSentMessages', 'uses'  =>  'MR\InboxController@sent']);
+	Route::get('create-message', ['as'    =>  'mrCreateMessage', 'uses'  =>  'MR\InboxController@create']);
+	Route::post('create-message', ['as'    =>  'mrDoCreateMessage', 'uses'  =>  'MR\InboxController@doCreate']);
+	Route::get('show-message/{id}', ['as'    =>  'mrShowMessage', 'uses'  =>  'MR\InboxController@show']);
+	Route::post('reply/{id}', ['as'    =>  'mrDoReply', 'uses'  =>  'MR\InboxController@doReply']);
+
+	// Distributors
+	Route::get('distributors', ['as'    =>  'mrDistributors', 'uses'  =>  'MR\ProductController@listAllDistributors']);
 
 	// Expenses Reports
 	Route::get('expenses-reports', ['as'    =>  'expensesReports', 'uses'  =>  'MR\ReportController@listAllExpensesReports']);
@@ -467,10 +546,9 @@ function()
 	Route::get('ajax-plans', ['as'    =>  'ajaxPlans', 'uses'  =>  'MR\PlanController@ajaxPlans']);
 	Route::get('add-plan', ['as'    =>  'addPlan', 'uses'  =>  'MR\PlanController@create']);
 	Route::post('add-plan', ['as'    =>  'doAddPlan', 'uses'  =>  'MR\PlanController@doCreate']);
-
 	Route::get('ajax-visit-statue', ['as'    =>  'ajaxVisitStatue', 'uses'  =>  'MR\ReportController@ajaxVisitStatue']);
 	Route::get('ajax-planned-vs-actual', ['as'    =>  'ajaxPlannedVsActual', 'uses'  =>  'MR\ReportController@plannedVsActual']);
-
+	Route::get('mr-export-plan-search/{type}', ['as'    =>  'mrExportPlans', 'uses'  =>  'MR\ExportController@plans']);
 
 	// Reports
 	Route::get('ajax-doctors', ['as'=>'ajaxDoctors', 'uses'=>'MR\ReportController@ajaxDoctors']);
@@ -490,14 +568,19 @@ function()
 	// Sales Search
 	Route::get('sales-search', ['as'    =>  'salesSearch', 'uses'  =>  'MR\SaleController@search']);
 	Route::post('sales-search', ['as'    =>  'doSalesSearch', 'uses'  =>  'MR\SaleController@doSearch']);
+	Route::get('export-sales-search/{type}', ['as'    =>  'mrExportSalesSearch', 'uses'  =>  'MR\ExportController@salesSearch']);
 
     // Report Search
     Route::get('report-search', ['as'    =>  'reportSearch', 'uses'  =>  'MR\ReportController@search']);
     Route::post('report-search', ['as'    =>  'doReportSearch', 'uses'  =>  'MR\ReportController@doSearch']);
+	Route::get('export-single-report/{id}/{type}', ['as'    =>  'mrExportSingleReport', 'uses'  =>  'MR\ExportController@singleReport']);
+	Route::get('export-report-search/{type}', ['as'    =>  'mrExportReportSearch', 'uses'  =>  'MR\ExportController@reportSearch']);
 
 	// Plan Search
 	Route::get('plan-search', ['as'    =>  'planSearch', 'uses'  =>  'MR\PlanController@search']);
 	Route::post('plan-search', ['as'    =>  'doPlanSearch', 'uses'  =>  'MR\PlanController@doSearch']);
+	Route::get('export-plan-search/{type}', ['as'    =>  'mrExportPlanSearch', 'uses'  =>  'MR\ExportController@planSearch']);
+	Route::get('export-leave-request-search/{type}', ['as'    =>  'mrExportLeaveRequestSearch', 'uses'  =>  'MR\ExportController@leaveRequestSearch']);
 
 	Route::get('test', ['as'    =>  'test', 'uses'  =>  'MR\LineController@test']);
 });

@@ -78,11 +78,11 @@ class Customer extends Model implements AuthenticatableContract,
 
     public static function totalMonthlyCoverage()
     {
-        $visitClass = Customer::select('class')->where('mr_id', 3)->get()->toArray();
-        // mr_session
+        $visitClass = Customer::select('class')->where('mr_id', \Auth::user()->id)->get()->toArray();
+
         $totalVisitsCount   =   VisitClass::whereIn('name', $visitClass)->sum('visits_count');
 
-        $actualVisitsCount  =   Report::where('mr_id', 3) //mr_session
+        $actualVisitsCount  =   Report::where('mr_id', \Auth::user()->id)
                                         ->where('month', date('M').'-'.date('Y'))
                                         ->count();
         return number_format(($actualVisitsCount/$totalVisitsCount) * 100, 2);
@@ -91,5 +91,10 @@ class Customer extends Model implements AuthenticatableContract,
     public static function monthlyProductsBought($id)
     {
         return Report::select('sold_products', 'date')->where('doctor_id', $id)->where('month', date('M-Y'))->get();
+    }
+
+    public function getDateAttribute($date)
+    {
+        return \Carbon\Carbon::parse($date)->format('d-m-Y');
     }
 }

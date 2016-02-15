@@ -24,8 +24,10 @@ class CreateAreaRequest extends Request
     public function rules()
     {
         return [
-            'name'  =>  'required',
-            'am'    =>  'required'
+            'name'          =>  'required',
+            'line'          =>  'required',
+            'am'            =>  'required',
+            'description'   =>  ''
         ];
     }
 }

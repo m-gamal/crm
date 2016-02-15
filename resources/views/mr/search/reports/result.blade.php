@@ -12,10 +12,18 @@
     <!-- Datatables Content -->
     <div class="block full">
         <div class="block-title">
+            <div class="block-options pull-right">
+                <a href="{{URL::route('mrExportReportSearch', 'xlsx')}}">
+                    <img src="{{URL::asset('img/excel.png')}}" alt="">
+                </a>
+                |
+                <a href="{{URL::route('mrExportReportSearch', 'pdf')}}">
+                    <img src="{{URL::asset('img/pdf.png')}}" alt="">
+                </a>
+            </div>
             <h2>
                 <strong>Report</strong> Search Result
             </h2>
-
         </div>
 
         @if(Session::has('message'))

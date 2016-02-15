@@ -14,6 +14,15 @@ All Customers
     <!-- Datatables Content -->
     <div class="block full">
         <div class="block-title">
+            <div class="block-options pull-right">
+                <a href="{{URL::route('smExportCustomerSearch', 'xlsx')}}">
+                    <img src="{{URL::asset('img/excel.png')}}" alt="">
+                </a>
+                |
+                <a href="{{URL::route('smExportCustomerSearch', 'pdf')}}">
+                    <img src="{{URL::asset('img/pdf.png')}}" alt="">
+                </a>
+            </div>
             <h2>
                 <strong>All</strong> Customers
             </h2>
@@ -45,7 +54,11 @@ All Customers
                 @if(count($customers) > 0)
                 @foreach($customers as $singleCustomer)
                 <tr>
-                    <td class="text-center">{{$singleCustomer->name}}</td>
+                    <td class="text-center">
+                        <a href="{{URL::route('smSingleDoctor', $singleCustomer->id)}}">
+                            {{$singleCustomer->name}}
+                        </a>
+                    </td>
                     <td class="text-center">{{$singleCustomer->class}}</td>
                     <td class="text-center">{{$singleCustomer->specialty}}</td>
                     <td class="text-center">{{$singleCustomer->email}}</td>

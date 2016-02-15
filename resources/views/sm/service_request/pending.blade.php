@@ -55,10 +55,10 @@
                             <td class="text-center">{{$singleServiceRequests->request_text}}</td>
                             <td class="text-center">
                                 <div class="btn-group">
-                                    <a class="btn btn-xs btn-success" href="{{URL::route('adminApprovePendingServiceRequest', $singleServiceRequests->id)}}"title="Approve">
+                                    <a class="btn btn-xs btn-success" href="{{URL::route('smApprovePendingServiceRequest', $singleServiceRequests->id)}}"title="Approve">
                                         <i class="fa fa-check"></i>
                                     </a>
-                                    <a class="btn btn-xs btn-danger" href="{{URL::route('adminDeclinePendingServiceRequest', $singleServiceRequests->id)}}" title="Reject">
+                                    <a class="btn btn-xs btn-danger" href="{{URL::route('smDeclinePendingServiceRequest', $singleServiceRequests->id)}}" title="Reject">
                                         <i class="fa fa-times"></i>
                                     </a>
                                 </div>

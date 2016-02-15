@@ -44,7 +44,6 @@ class PlanController extends Controller
         $from                       =   $request->date_from;
         $to                         =   $request->date_to;
 
-        // mr_session
         $allSearchedPlan = Plan::where('mr_id', $mr)->where('date', '>=', $from)
             ->where('date', '<=', $to)
             ->approved()
@@ -89,7 +88,6 @@ class PlanController extends Controller
         $from                       =   $request->date_from;
         $to                         =   $request->date_to;
 
-        // mr_session
         $allSearchedPlan = AMPlan::where('am_id', $am)->where('date', '>=', $from)
             ->where('date', '<=', $to)
             ->approved()
@@ -133,7 +131,6 @@ class PlanController extends Controller
         $from                       =   $request->date_from;
         $to                         =   $request->date_to;
 
-        // mr_session
         $allSearchedPlan = SMPlan::where('sm_id', $sm)->where('date', '>=', $from)
             ->where('date', '<=', $to)
             ->approved()

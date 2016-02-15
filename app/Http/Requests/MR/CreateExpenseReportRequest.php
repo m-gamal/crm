@@ -24,12 +24,19 @@ class CreateExpenseReportRequest extends Request
     public function rules()
     {
         return [
-            'month'     =>  'required',
-            'serial'    =>  'required|unique:expense_report,serial',
-            'date'      =>  'required',
-            'cost'      =>  'numeric',
-            'total'     =>  'required|numeric',
-            'invoices'  =>  'required'
+            'month'                 =>  'required',
+            'year'                  =>  'required|numeric',
+            'hotel_date'            =>  '',
+            'hotel'                 =>  '',
+            'hotel_meal'            =>  '',
+            'hotel_cost'            =>  'numeric',
+            'transportation_date'   =>  '',
+            'transportation_city'   =>  '',
+            'transportation_cost'   =>  'numeric',
+            'meeting_date'          =>  '',
+            'meeting'               =>  '',
+            'meeting_cost'          =>  'numeric',
+            'invoices'              =>  'mimes:zip'
         ];
     }
 }

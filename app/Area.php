@@ -27,4 +27,14 @@ class Area extends Model
     {
         return $this->belongsTo('App\Employee');
     }
+
+    public function getDateAttribute($date)
+    {
+        return \Carbon\Carbon::parse($date)->format('d-m-Y');
+    }
+
+    public function line()
+    {
+        return $this->belongsTo('App\Line');
+    }
 }

@@ -1,4 +1,4 @@
-@extends('admin.layouts.master')
+@extends('sm.layouts.master')
 @section('title')
 Single Report
 @endsection

@@ -43,10 +43,15 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label">Year</label>
                         <div class="col-md-10">
-                            <p class="form-control-static">{{date('Y')}}</p>
+                            <input type="text" name="year" class="form-control" placeholder="Year">
+                            @if($errors->has('year'))
+                                <div class="alert alert-danger">
+                                    <i class="fa fa-warning"></i>
+                                    <strong>Error :</strong> {{$errors->first('year')}}
+                                </div>
+                            @endif
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label class="col-md-2 control-label">Month</label>
                         <div class="col-md-10">
@@ -73,33 +78,24 @@
                             @endif
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label">Serial</label>
-                        <div class="col-md-10">
-                            <input type="text" name="serial" class="form-control" placeholder="Serial">
-                            @if($errors->has('serial'))
-                                <div class="alert alert-danger">
-                                    <i class="fa fa-warning"></i>
-                                    <strong>Error :</strong> {{$errors->first('serial')}}
-                                </div>
-                            @endif
+                    <fieldset id="hotel">
+                        <legend><i class="fa fa-angle-right"></i>
+                            Hotel Accommodation
+                            <a id="new_hotel" class="control-label" href="#"><i class="fa fa-plus"></i></a>
+                        </legend>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Date</label>
+                            <div class="col-md-10">
+                                <input type="text" name="hotel_date" class="form-control input-datepicker" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy">
+                                @if($errors->has('hotel_date'))
+                                    <div class="alert alert-danger">
+                                        <i class="fa fa-warning"></i>
+                                        <strong>Error :</strong> {{$errors->first('hotel_date')}}
+                                    </div>
+                                @endif
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label">Date</label>
-                        <div class="col-md-10">
-                            <input type="text" name="date" class="form-control input-datepicker" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd">
-                            @if($errors->has('date'))
-                                <div class="alert alert-danger">
-                                    <i class="fa fa-warning"></i>
-                                    <strong>Error :</strong> {{$errors->first('date')}}
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                    <!-- Jquery Tags Input (class is initialized in js/app.js -> uiInit()), for extra usage examples you can check out https://github.com/xoxco/jQuery-Tags-Input -->
-                    <fieldset>
-                        <legend><i class="fa fa-angle-right"></i> Hotel Accommodation </legend>
+                        <!-- Jquery Tags Input (class is initialized in js/app.js -> uiInit()), for extra usage examples you can check out https://github.com/xoxco/jQuery-Tags-Input -->
                         <div class="form-group">
                             <label class="col-md-2 control-label">Hotel</label>
                             <div class="col-md-10">
@@ -116,23 +112,106 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label">Meals</label>
                             <div class="col-md-10">
-                                <input type="text" name="meals" class="form-control" placeholder="Meals">
-                                @if($errors->has('meals'))
+                                <input type="text" name="hotel_meal" class="form-control" placeholder="Meals">
+                                @if($errors->has('hotel_meal'))
                                     <div class="alert alert-danger">
                                         <i class="fa fa-warning"></i>
-                                        <strong>Error :</strong> {{$errors->first('meals')}}
+                                        <strong>Error :</strong> {{$errors->first('hotel_meal')}}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Cost</label>
+                            <div class="col-md-10">
+                                <input type="text" name="hotel_cost" class="form-control" placeholder="Total">
+                                @if($errors->has('hotel_cost'))
+                                    <div class="alert alert-danger">
+                                        <i class="fa fa-warning"></i>
+                                        <strong>Error :</strong> {{$errors->first('hotel_cost')}}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset class="extra_hotel" style="display:none;">
+                        <legend><i class="fa fa-angle-right"></i> Hotel Accommodation </legend>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Date</label>
+                            <div class="col-md-10">
+                                <input type="text" name="extra_hotel_date[]" class="form-control datepicker_recurring_start" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy">
+                                @if($errors->has('extra_hotel_date'))
+                                    <div class="alert alert-danger">
+                                        <i class="fa fa-warning"></i>
+                                        <strong>Error :</strong> {{$errors->first('extra_hotel_date')}}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                        <!-- Jquery Tags Input (class is initialized in js/app.js -> uiInit()), for extra usage examples you can check out https://github.com/xoxco/jQuery-Tags-Input -->
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Hotel</label>
+                            <div class="col-md-10">
+                                <input type="text" name="extra_hotel[]" class="form-control" placeholder="Hotel">
+                                @if($errors->has('extra_hotel'))
+                                    <div class="alert alert-danger">
+                                        <i class="fa fa-warning"></i>
+                                        <strong>Error :</strong> {{$errors->first('extra_hotel')}}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Meals</label>
+                            <div class="col-md-10">
+                                <input type="text" name="extra_hotel_meal[]" class="form-control" placeholder="Meals">
+                                @if($errors->has('extra_hotel_meal'))
+                                    <div class="alert alert-danger">
+                                        <i class="fa fa-warning"></i>
+                                        <strong>Error :</strong> {{$errors->first('extra_hotel_meal')}}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Cost</label>
+                            <div class="col-md-10">
+                                <input type="text" name="extra_hotel_cost[]" class="form-control" placeholder="Total">
+                                @if($errors->has('extra_hotel_cost'))
+                                    <div class="alert alert-danger">
+                                        <i class="fa fa-warning"></i>
+                                        <strong>Error :</strong> {{$errors->first('extra_hotel_cost')}}
                                     </div>
                                 @endif
                             </div>
                         </div>
                     </fieldset>
 
-                    <fieldset>
-                        <legend><i class="fa fa-angle-right"></i> Transportation </legend>
+                    <fieldset id="transportation">
+                        <legend>
+                            <i class="fa fa-angle-right"></i>
+                            Transportation
+                            <a id="new_transportation" class="control-label" href=""><i class="fa fa-plus"></i></a>
+                        </legend>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Date</label>
+                            <div class="col-md-10">
+                                <input type="text" name="transportation_date" class="form-control input-datepicker" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy">
+                                @if($errors->has('transportation_date'))
+                                    <div class="alert alert-danger">
+                                        <i class="fa fa-warning"></i>
+                                        <strong>Error :</strong> {{$errors->first('transportation_date')}}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label">City</label>
                             <div class="col-md-10">
-                                <input type="text" name="city" class="form-control" placeholder="City">
+                                <input type="text" name="transportation_city" class="form-control" placeholder="City">
                                 @if($errors->has('city'))
                                     <div class="alert alert-danger">
                                         <i class="fa fa-warning"></i>
@@ -145,23 +224,122 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label">Cost</label>
                             <div class="col-md-10">
-                                <input type="text" name="cost" class="form-control" placeholder="Cost">
-                                @if($errors->has('cost'))
+                                <input type="text" name="transportation_cost" class="form-control" placeholder="Cost">
+                                @if($errors->has('transportation_cost'))
                                     <div class="alert alert-danger">
                                         <i class="fa fa-warning"></i>
-                                        <strong>Error :</strong> {{$errors->first('cost')}}
+                                        <strong>Error :</strong> {{$errors->first('transportation_cost')}}
                                     </div>
                                 @endif
                             </div>
                         </div>
                     </fieldset>
 
-                    <fieldset>
-                        <legend></legend>
+                    <fieldset class="extra_transportation" style="display: none;">
+                        <legend><i class="fa fa-angle-right"></i> Transportation </legend>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Date</label>
+                            <div class="col-md-10">
+                                <input type="text" name="extra_transportation_date[]" class="form-control datepicker_recurring_start" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy">
+                                @if($errors->has('extra_transportation_date'))
+                                    <div class="alert alert-danger">
+                                        <i class="fa fa-warning"></i>
+                                        <strong>Error :</strong> {{$errors->first('extra_transportation_date')}}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">City</label>
+                            <div class="col-md-10">
+                                <input type="text" name="extra_transportation_city[]" class="form-control" placeholder="City">
+                                @if($errors->has('extra_transportation_city'))
+                                    <div class="alert alert-danger">
+                                        <i class="fa fa-warning"></i>
+                                        <strong>Error :</strong> {{$errors->first('extra_transportation_city')}}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Cost</label>
+                            <div class="col-md-10">
+                                <input type="text" name="extra_transportation_cost[]" class="form-control" placeholder="Cost">
+                                @if($errors->has('extra_transportation_cost'))
+                                    <div class="alert alert-danger">
+                                        <i class="fa fa-warning"></i>
+                                        <strong>Error :</strong> {{$errors->first('extra_transportation_cost')}}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset id="meeting">
+                        <legend>
+                            Meetings <a id="new_meeting" class="control-label" href=""><i class="fa fa-plus"></i></a>
+                        </legend>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Date</label>
+                            <div class="col-md-10">
+                                <input type="text" name="meeting_date" class="form-control input-datepicker" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy">
+                                @if($errors->has('meeting_date'))
+                                    <div class="alert alert-danger">
+                                        <i class="fa fa-warning"></i>
+                                        <strong>Error :</strong> {{$errors->first('meeting_date')}}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                        <!-- Jquery Tags Input (class is initialized in js/app.js -> uiInit()), for extra usage examples you can check out https://github.com/xoxco/jQuery-Tags-Input -->
+
                         <div class="form-group">
                             <label class="col-md-2 control-label">Group Meeting</label>
                             <div class="col-md-10">
-                                <input type="text" name="group_meeting" class="form-control" placeholder="Group Meeting">
+                                <input type="text" name="meeting" class="form-control" placeholder="Group Meeting">
+                                @if($errors->has('meeting'))
+                                    <div class="alert alert-danger">
+                                        <i class="fa fa-warning"></i>
+                                        <strong>Error :</strong> {{$errors->first('meeting')}}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Cost</label>
+                            <div class="col-md-10">
+                                <input type="text" name="meeting_cost" class="form-control" placeholder="Total">
+                                @if($errors->has('meeting_cost'))
+                                    <div class="alert alert-danger">
+                                        <i class="fa fa-warning"></i>
+                                        <strong>Error :</strong> {{$errors->first('meeting_cost')}}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="extra_meeting" style="display:none">
+                        <legend>Meetings</legend>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Date</label>
+                            <div class="col-md-10">
+                                <input type="text" name="extra_meeting_date[]" class="form-control datepicker_recurring_start" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy">
+                                @if($errors->has('extra_meeting_date'))
+                                    <div class="alert alert-danger">
+                                        <i class="fa fa-warning"></i>
+                                        <strong>Error :</strong> {{$errors->first('extra_meeting_date')}}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                        <!-- Jquery Tags Input (class is initialized in js/app.js -> uiInit()), for extra usage examples you can check out https://github.com/xoxco/jQuery-Tags-Input -->
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Group Meeting</label>
+                            <div class="col-md-10">
+                                <input type="text" name="extra_meeting[]" class="form-control" placeholder="Group Meeting">
                                 @if($errors->has('group_meeting'))
                                     <div class="alert alert-danger">
                                         <i class="fa fa-warning"></i>
@@ -171,61 +349,40 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-2 control-label">Used Facilities</label>
+                            <label class="col-md-2 control-label">Cost</label>
                             <div class="col-md-10">
-                                <input type="text" name="used_facilities" class="form-control" placeholder="Used Facilities">
-                                @if($errors->has('used_facilities'))
+                                <input type="text" name="extra_meeting_cost[]" class="form-control" placeholder="Total">
+                                @if($errors->has('extra_meeting_cost'))
                                     <div class="alert alert-danger">
                                         <i class="fa fa-warning"></i>
-                                        <strong>Error :</strong> {{$errors->first('used_facilities')}}
+                                        <strong>Error :</strong> {{$errors->first('extra_meeting_cost')}}
                                     </div>
                                 @endif
                             </div>
                         </div>
                     </fieldset>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label">Description</label>
-                        <div class="col-md-10">
-                            <textarea rows="6" name="description" class="form-control"></textarea>
-                            @if($errors->has('description'))
-                                <div class="alert alert-danger">
-                                    <i class="fa fa-warning"></i>
-                                    <strong>Error :</strong> {{$errors->first('description')}}
-                                </div>
-                            @endif
+                    <fieldset>
+                        <legend>Uploads</legend>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Invoices</label>
+                            <div class="col-md-10">
+                                <input type="file" name="invoices" class="form-control" multiple="multiple">
+                                @if($errors->has('invoices'))
+                                    <div class="alert alert-danger">
+                                        <i class="fa fa-warning"></i>
+                                        <strong>Error :</strong> {{$errors->first('invoices')}}
+                                    </div>
+                                @endif
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label">Total</label>
-                        <div class="col-md-10">
-                            <input type="text" name="total" class="form-control" placeholder="Total">
-                            @if($errors->has('total'))
-                                <div class="alert alert-danger">
-                                    <i class="fa fa-warning"></i>
-                                    <strong>Error :</strong> {{$errors->first('total')}}
-                                </div>
-                            @endif
+                        <div class="form-group form-actions">
+                            <div class="col-md-8 col-md-offset-4">
+                                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-angle-right"></i> Submit</button>
+                                <button type="reset" class="btn btn-sm btn-warning"><i class="fa fa-repeat"></i> Reset</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label">Invoices</label>
-                        <div class="col-md-10">
-                            <input type="file" name="invoices" class="form-control" multiple="multiple">
-                            @if($errors->has('invoices'))
-                                <div class="alert alert-danger">
-                                    <i class="fa fa-warning"></i>
-                                    <strong>Error :</strong> {{$errors->first('invoices')}}
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="form-group form-actions">
-                        <div class="col-md-8 col-md-offset-4">
-                            <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-angle-right"></i> Submit</button>
-                            <button type="reset" class="btn btn-sm btn-warning"><i class="fa fa-repeat"></i> Reset</button>
-                        </div>
-                    </div>
-                    <!-- END Select Components Content -->
+                        <!-- END Select Components Content -->
+                    </fieldset>
                 {!! Form::close() !!}
                 <!-- END Basic Form Elements Content -->
             </div>
@@ -236,4 +393,27 @@
 
 @section('custom_footer_scripts')
     <script>$('#expense_report').addClass('active');</script>
+
+    <script>
+
+        $('#new_hotel').click(function(event){
+            event.preventDefault()
+            $("#hotel").append($(".extra_hotel").html());
+        });
+
+        $('#new_transportation').click(function(event){
+            event.preventDefault()
+            $("#transportation").append($(".extra_transportation").html());
+        });
+
+        $('#new_meeting').click(function(event){
+            event.preventDefault()
+            $("#meeting").append($(".extra_meeting").html());
+        });
+
+        $(document).on('focus',".datepicker_recurring_start", function(){
+            $(this).datepicker();
+        });
+        
+    </script>
 @endsection

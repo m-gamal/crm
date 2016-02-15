@@ -80,7 +80,8 @@
             <div class="block">
                 <div class="alert alert-info">
                     <i class="fa fa-download"></i>
-                    <a href="#"> Download Doctors List </a>
+                    <a href="{{URL::asset('uploads/doctors_list/'. \Auth::user()->id .'/doctors_list.xlsx')}}"
+                       download="{{'doctors_list.xlsx'}}" target="_blank"> Download Doctors List </a>
                 </div>
             </div>
         </div>
@@ -109,12 +110,14 @@
                                 Products
                             </a>
                         </li>
+
                         <li>
                             <a href="#coverage_tab">
                                 <i class="fa fa-pie-chart"></i>
                                 Coverage
                             </a>
                         </li>
+
                         <li>
                             <a href="#sales_tab">
                                 <i class="fa fa-money"></i>
@@ -138,7 +141,7 @@
                                         <th class="text-center">Description Name</th>
                                         <th class="text-center">Total Visits</th>
                                         <th class="text-center">Remaining Visits </th>
-                                        <th class="text-center"> Products Bought </th>
+                                        {{--<th class="text-center"> Products Bought </th>--}}
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -148,11 +151,11 @@
                                             <td class="text-center">{{$singleDoctor->description_name}}</td>
                                             <td class="text-center">{{$singleDoctor->visitClass->visits_count}}</td>
                                             <td class="text-center">{{$singleDoctor->visitClass->visits_count - $actualVisits[$singleDoctor->id]}}</td>
-                                            <td class="text-center">
-                                                <a href="" data-toggle="modal" data-target="#bought_products_{{$singleDoctor->id}}">
-                                                    <i class="fa fa-eye" ></i>
-                                                </a>
-                                            </td>
+                                            {{--<td class="text-center">--}}
+                                                {{--<a href="" data-toggle="modal" data-target="#bought_products_{{$singleDoctor->id}}">--}}
+                                                    {{--<i class="fa fa-eye" ></i>--}}
+                                                {{--</a>--}}
+                                            {{--</td>--}}
                                         </tr>
                                     @endforeach
                                     </tbody>
@@ -278,9 +281,6 @@
                                     <li class="active">
                                         <a href="#direct" data-toggle="tab"> Direct </a>
                                     </li>
-                                    <li>
-                                        <a href="#indirect" tabindex="-1" data-toggle="tab"> Indirect </a>
-                                    </li>
                                 </ul>
                             </div>
                             <div class="col-md-9">
@@ -293,6 +293,8 @@
                                                     <tr>
                                                         <th class="text-center">Name</th>
                                                         <th class="text-center">Sold Quantity</th>
+                                                        <th class="text-center">Target</th>
+                                                        <th class="text-center">Achievement</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -300,15 +302,24 @@
                                                         <tr>
                                                             <td class="text-center">{{$product}}</td>
                                                             <td class="text-center">{{$quantity}} Units</td>
+                                                            <td class="text-center">
+                                                                {{\App\Employee::target(\Request::segment(\Auth::user()->id),
+                                                                \App\Product::where('name', $product)->first()->id,
+                                                                \App\Territory::where('mr_id', \Auth::user()->id)->first()->id)}}
+                                                            </td>
+                                                            <td class="text-center">
+                                                                @if(\App\Employee::target(\Request::segment(\Auth::user()->id),
+                                                                \App\Product::where('name', $product)->first()->id,
+                                                                \App\Territory::where('mr_id', \Auth::user()->id)->first()->id) != 0 )
+                                                                {{($quantity / \App\Employee::target(\Request::segment(\Auth::user()->id),\App\Product::where('name', $product)->first()->id,\App\Territory::where('mr_id', \Auth::user()->id)->first()->id)) .'%'}}
+                                                                @endif
+                                                            </td>
                                                         </tr>
                                                     @endforeach
                                                     </tbody>
                                                 </table>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="indirect">
-                                        <p> N/A </p>
                                     </div>
                                 </div>
                             </div>

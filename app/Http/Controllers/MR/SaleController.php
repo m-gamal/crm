@@ -2,21 +2,28 @@
 
 namespace App\Http\Controllers\MR;
 
+use App\Customer;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MR\SalesSearchRequest;
 use App\Product;
 use App\Employee;
 use App\Report;
+use App\ReportSampleProduct;
+use App\ReportPromotedProduct;
+use App\ReportSoldProduct;
+use App\ReportGift;
 
 class SaleController extends Controller
 {
     public function search()
     {
-        $products   =   Product::where('line_id', Employee::find(3)->line_id)->get(); //mr_session
+        $products   =   Product::where('line_id', Employee::find(\Auth::user()->id)->line_id)->get();
+        $doctors    =   Customer::where('mr_id', \Auth::user()->id)->get();
 
         $dataView   =   [
-            'products'  =>  $products
+            'products'  =>  $products,
+            'doctors'   =>  $doctors
         ];
 
         return view('mr.search.sales.search', $dataView);
@@ -24,39 +31,48 @@ class SaleController extends Controller
 
     public function doSearch(SalesSearchRequest $request)
     {
-        $searchResult   =   [];
+        $productSales   =   [];
         $from           =   $request->date_from;
         $to             =   $request->date_to;
-        $products       =   $request->products;
+        $product        =   $request->product;
+        $doctor         =   $request->doctor;
 
-        // mr_session
-        $allSearchedReport = Report::select('sold_products')
-                ->where('date', '>=', $from)
-                ->where('date', '<=', $to)
-                ->where('mr_id', 3)
-                ->where('sold_products' , '<>', 'NULL')
-                ->get();
+        $allSearchedReport = Report::select('id')->where('date', '>=', $from)->where('date', '<=', $to);
 
-        foreach($allSearchedReport as $singleReport)
+        if(!empty($MR)){
+            $allSearchedReport =    $allSearchedReport->where('mr_id', \Auth::user()->id);
+        }
+
+        if(!empty($doctor))
         {
-            foreach(json_decode($singleReport) as $soldProducts){
-                foreach( json_decode($soldProducts) as $singleProduct=> $quantity)
-                {
-                    $productName = Product::findOrFail($singleProduct)->name;
-                    if (in_array($singleProduct, $products))
-                    {
-                        if (isset($searchResult [$productName])) {
-                            $searchResult [$productName] += $quantity;
-                        } else {
-                            $searchResult [$productName] = $quantity;
-                        }
-                    }
-                }
+            $allSearchedReport  =   $allSearchedReport->where('doctor_id', $doctor);
+        }
+
+        $searchResult = ReportSoldProduct::whereIn('report_id', $allSearchedReport->get());
+
+        if(!empty($product)){
+            $searchResult->where('product_id', $product);
+        }
+
+
+        foreach($searchResult->get() as $singleResult)
+        {
+            if(isset($productSales[$singleResult->product->name])){
+                $productSales[$singleResult->product->name] +=   $singleResult->quantity;
+            } else {
+                $productSales[$singleResult->product->name] =   $singleResult->quantity;
             }
         }
+
         $dataView   =   [
-            'searchResult'  =>  $searchResult
+            'searchResult'  =>  $productSales
         ];
+
+
+        \Session::flash('date_from', $from);
+        \Session::flash('date_to', $to);
+        \Session::flash('productSales', $productSales);
+
         return view('mr.search.sales.result', $dataView);
     }
 }

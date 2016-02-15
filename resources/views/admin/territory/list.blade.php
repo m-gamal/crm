@@ -30,11 +30,13 @@ All Territories
         @endif
 
         <div class="table-responsive">
-            <table id="example-datatable" class="table table-vcenter table-condensed table-bordered">
+            <table class="example-datatable table table-vcenter table-condensed table-bordered">
                 <thead>
                 <tr>
                     <th class="text-center">Name</th>
                     <th class="text-center">Area</th>
+                    <th class="text-center">Medical Rep</th>
+                    <th class="text-center">Description</th>
                     <th class="text-center">Actions</th>
                 </tr>
                 </thead>
@@ -44,6 +46,8 @@ All Territories
                 <tr>
                     <td class="text-center">{{$singleTerritory->name}}</td>
                     <td class="text-center">{{$singleTerritory->area->name}}</td>
+                    <td class="text-center">{{$singleTerritory->mr->name}}</td>
+                    <td class="text-center">{{$singleTerritory->description}}</td>
                     <td class="text-center">
                         <div class="btn-group">
                             <a href="{{URL::route('editTerritory', $singleTerritory->id)}}" data-toggle="tooltip" title="Edit" class="btn btn-xs btn-default"><i class="fa fa-pencil"></i></a>
@@ -87,6 +91,6 @@ All Territories
 
 @section('custom_footer_scripts')
 <script>$('#territory').addClass('active');</script>
-<script src="js/pages/tablesDatatables.js"></script>
+<script src="{{URL::asset('js/pages/tablesDatatables.js')}}"></script>
 <script>$(function(){ TablesDatatables.init(); });</script>
 @endsection

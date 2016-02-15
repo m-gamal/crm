@@ -50,4 +50,10 @@ class Plan extends Model
             return "<span class=\"label label-danger\">Declined</span>";
         }
     }
+
+    public function setDateAttribute($date)
+    {
+        $this->attributes['date'] = \Carbon\Carbon::parse($date)->format('Y-m-d');
+    }
+
 }

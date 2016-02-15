@@ -12,10 +12,28 @@ All Plans
     <!-- END Breadcrumb -->
 
     <div class="row">
+        @if(Session::has('message'))
+        <div class="form-group">
+            <div class="alert alert-success alert-dismissable">
+                <i class="fa fa-check"></i>
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <b> Success : </b> {{ Session::get('message') }}
+            </div>
+        </div>
+        @endif
         <!-- Input Grid Block -->
         <div class="block">
             <!-- Input Grid Title -->
             <div class="block-title">
+                <div class="block-options pull-right">
+                    <a href="{{URL::route('mrExportPlans', 'xlsx')}}">
+                        <img src="{{URL::asset('img/excel.png')}}" alt="">
+                    </a>
+                    |
+                    <a href="{{URL::route('mrExportPlans', 'pdf')}}">
+                        <img src="{{URL::asset('img/pdf.png')}}" alt="">
+                    </a>
+                </div>
                 <h2>
                     Planned Visits
                     <a href="{{URL::route('addPlan')}}" class="label label-success" title="Add New Plan">+</a>

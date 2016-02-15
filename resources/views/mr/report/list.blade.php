@@ -52,7 +52,7 @@ All Reports
                     <td class="text-center">{{$singleReport->date}}</td>
                     <td class="text-center">{{$singleReport->doctor->name}}</td>
                     <td class="text-center">{{$singleReport->follow_up}}</td>
-                    <td class="text-center">{{!empty($singleReport->double_visit_manager_id) ? $singleReport->double_visit_manager_id : 'N/A'}}</td>
+                    <td class="text-center">{{ !empty($singleReport->double_visit_manager_id) ? \App\Employee::findOrFail($singleReport->double_visit_manager_id)->name : 'N/A' }}</td>
                     <td class="text-center">{{$singleReport->total_sold_products_price}}</td>
                     <td class="text-center">{!! $singleReport->is_planned !!}</td>
                 </tr>
@@ -62,6 +62,23 @@ All Reports
             </table>
         </div>
     </div>
+
+    <div class="block full">
+        <div class="block-title">
+            <h2>
+                <strong>Visits</strong> Status
+            </h2>
+        </div>
+        <div class="row">
+        <div class="col-md-6">
+            <div id="visit-chart-pie" class="chart"></div>
+        </div>
+
+        <div class="col-md-6">
+            <div id="planned-vs-actual-chart-pie" class="chart"></div>
+        </div>
+        </div>
+    </div>
     <!-- END Datatables Content -->
 @endsection
 
@@ -69,4 +86,17 @@ All Reports
 <script>$('#report').addClass('active');</script>
 <script src="{{URL::asset('js/pages/tablesDatatables.js')}}"></script>
 <script>$(function(){ TablesDatatables.init(); });</script>
+<script>
+    // global app configuration object
+    var config = {
+        routes: [
+            {
+                visitStatue     :   "{{URL::route('ajaxVisitStatue')}}",
+                plannedVsActual :   "{{URL::route('ajaxPlannedVsActual')}}"
+            }
+        ]
+    };
+</script>
+<script src="{{URL::asset('js/mr/visit_statue.js')}}"></script>
+<script src="{{URL::asset('js/mr/planned_vs_actual.js')}}"></script>
 @endsection

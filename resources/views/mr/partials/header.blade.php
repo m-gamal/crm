@@ -13,34 +13,22 @@
 
     <!-- Right Header Navigation -->
     <ul class="nav navbar-nav-custom pull-right">
-        <!-- Alternative Sidebar Toggle Button -->
         <li>
             <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle">
-                <i class="fa fa-bell fa-2x"></i>
-                <span class="label label-primary label-indicator animation-floating">1</span>
+                <i class="fa fa-envelope" style="font-size: 18px; @if(count($unread)) color : red; @endif"></i>
+                @if(count($unread)) <span class="label label-primary label-indicator animation-floating">{{count($unread)}}</span> @endif
             </a>
             <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
-                <li>
-                    <div class="alert alert-info alert-alt">
-                        <small>15 min ago</small><br>
-                        <i class="fa fa-refresh"></i> New Updates !
-                    </div>
-                </li>
-            </ul>
-        </li>
-
-        <li>
-            <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle">
-                <i class="fa fa-envelope"></i>
-                <span class="label label-primary label-indicator animation-floating">1</span>
-            </a>
-            <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
-                <li>
-                    <div class="alert alert-success alert-alt">
-                        <small>5 min ago</small><br>
-                        <i class="fa fa-envelope"></i> New Message !
-                    </div>
-                </li>
+                @foreach($unread as $singleMessage)
+                    <li>
+                        <div class="alert alert-success alert-alt">
+                            <a href="{{URL::route('mrShowMessage', $singleMessage->id)}}">
+                                <small>{{$singleMessage->time}}</small><br>
+                                <i class="fa fa-envelope"></i> New Message
+                            </a>
+                        </div>
+                    </li>
+                @endforeach
             </ul>
         </li>
 
@@ -52,8 +40,7 @@
             </a>
             <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
                 <li>
-                    <a href="{{URL::route('lock')}}"><i class="fa fa-lock fa-fw pull-right"></i> Lock</a>
-                    <a href="#"><i class="fa fa-ban fa-fw pull-right"></i> Logout</a>
+                    <a href="{{URL::route('logout')}}"><i class="fa fa-ban fa-fw pull-right"></i> Logout</a>
                 </li>
             </ul>
         </li>

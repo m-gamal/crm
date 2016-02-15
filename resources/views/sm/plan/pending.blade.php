@@ -49,7 +49,7 @@
                     @foreach($pendingPlans as $singlePlan)
                         <tr>
                             <td class="text-center">{{$singlePlan->date}}</td>
-                            <td class="text-center">{{$singlePlan->mr->name}}</td>
+                            <td class="text-center">{{$singlePlan->emp->name}}</td>
                             <td class="text-center">
                                 @foreach((array)json_decode($singlePlan->doctors) as $singleDoctor)
                                     <label class="label label-info">
@@ -59,10 +59,10 @@
                             </td>
                             <td class="text-center">
                                 <div class="btn-group">
-                                    <a class="btn btn-xs btn-success" href="{{URL::route('amApprovePendingPlan', $singlePlan->id)}}"title="Approve">
+                                    <a class="btn btn-xs btn-success" href="{{URL::route('smApprovePendingPlan', $singlePlan->id)}}"title="Approve">
                                         <i class="fa fa-check"></i>
                                     </a>
-                                    <a class="btn btn-xs btn-danger" href="{{URL::route('amDeclinePendingPlan', $singlePlan->id)}}" title="Reject">
+                                    <a class="btn btn-xs btn-danger" href="{{URL::route('smDeclinePendingPlan', $singlePlan->id)}}" title="Reject">
                                         <i class="fa fa-times"></i>
                                     </a>
                                 </div>

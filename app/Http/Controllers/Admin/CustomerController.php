@@ -44,6 +44,8 @@ class CustomerController extends Controller
             'customers'  =>  $searchResult
         ];
 
+        \Session::flash('customers', $searchResult);
+
         return view('admin.customer.list', $dataView);
     }
 
@@ -91,7 +93,10 @@ class CustomerController extends Controller
         $customer->address_description  = $request->address_description;
         $customer->am_working           = $request->am_working;
         $customer->mr_id                = $request->mr;
+        $customer->time_of_visit        = $request->time_of_visit;
+        $customer->comment              = $request->comment;
         $customer->active               = $request->active;
+
         try {
             $customer->save();
             return redirect()->back()->with('message','Customer has been added successfully !');
@@ -129,6 +134,8 @@ class CustomerController extends Controller
         $customer->address_description  = $request->address_description;
         $customer->am_working           = $request->am_working;
         $customer->mr_id                = $request->mr;
+        $customer->time_of_visit        = $request->time_of_visit;
+        $customer->comment              = $request->comment;
         $customer->active               = $request->active;
 
         try {
@@ -168,25 +175,27 @@ class CustomerController extends Controller
 
         \Excel::load(public_path('uploads/doctors_list/'.$mrId.'/doctors_list.xlsx'), function($reader) use ($mrId){
             $results = $reader->get();
-
+            $reader->ignoreEmpty();
             foreach ($results as $row) {
-                Customer::create([
-                    'name'                  => $row->name,
-                    'email'                 => $row->email,
-                    'class'                 => $row->class,
-                    'description'           => $row->description,
-                    'description_name'      => $row->description_name,
-                    'specialty'             => $row->specialty,
-                    'mobile'                => $row->mobile,
-                    'clinic_tel'            => $row->clinic_tel,
-                    'address'               => $row->address,
-                    'address_description'   => $row->address_description,
-                    'am_working'            => $row->am_working,
-                    'time_of_visit'         => $row->time_of_visit,
-                    'comment'               => $row->comment,
-                    'active'                =>  1,
-                    'mr_id'                 => $mrId
-                ]);
+                if (isset($row) && !is_null($row->name)){
+                    Customer::create([
+                        'name'                  => $row->name,
+                        'email'                 => $row->email,
+                        'class'                 => $row->class,
+                        'description'           => $row->description,
+                        'description_name'      => $row->description_name,
+                        'specialty'             => $row->specialty,
+                        'mobile'                => $row->mobile,
+                        'clinic_tel'            => $row->clinic_tel,
+                        'address'               => $row->address,
+                        'address_description'   => $row->address_description,
+                        'am_working'            => $row->am_working,
+                        'time_of_visit'         => $row->time_of_visit,
+                        'comment'               => $row->comment,
+                        'active'                =>  1,
+                        'mr_id'                 => $mrId
+                    ]);
+                }
             }
         });
 

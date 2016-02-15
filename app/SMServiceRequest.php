@@ -49,4 +49,9 @@ class SMServiceRequest extends Model
             return "<span class=\"label label-info\">Pending</span>";
         }
     }
+
+    public function getDateAttribute($date)
+    {
+        return \Carbon\Carbon::parse($date)->format('d-m-Y');
+    }
 }

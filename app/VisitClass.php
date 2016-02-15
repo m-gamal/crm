@@ -19,4 +19,9 @@ class VisitClass extends Model
      * @var bool
      */
     public $timestamps = true;
+
+    public function getDateAttribute($date)
+    {
+        return \Carbon\Carbon::parse($date)->format('d-m-Y');
+    }
 }

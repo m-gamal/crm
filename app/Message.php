@@ -40,4 +40,9 @@ class Message extends Model
     {
         return $this->hasMany('App\MessageReply', 'msg_id');
     }
+
+    public function getDateAttribute($date)
+    {
+        return \Carbon\Carbon::parse($date)->format('d-m-Y');
+    }
 }

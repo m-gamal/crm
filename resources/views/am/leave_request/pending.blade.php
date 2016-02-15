@@ -57,10 +57,10 @@
                             <td class="text-center">{{$singleLeaveRequests->leave_end}}</td>
                             <td class="text-center">
                                 <div class="btn-group">
-                                    <a class="btn btn-xs btn-success" href="{{URL::route('adminApprovePendingLeaveRequest', $singleLeaveRequests->id)}}"title="Approve">
+                                    <a class="btn btn-xs btn-success" href="{{URL::route('amApprovePendingLeaveRequest', $singleLeaveRequests->id)}}"title="Approve">
                                         <i class="fa fa-check"></i>
                                     </a>
-                                    <a class="btn btn-xs btn-danger" href="{{URL::route('adminDeclinePendingLeaveRequest', $singleLeaveRequests->id)}}" title="Reject">
+                                    <a class="btn btn-xs btn-danger" href="{{URL::route('amDeclinePendingLeaveRequest', $singleLeaveRequests->id)}}" title="Reject">
                                         <i class="fa fa-times"></i>
                                     </a>
                                 </div>

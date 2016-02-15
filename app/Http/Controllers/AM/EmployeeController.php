@@ -15,7 +15,7 @@ class EmployeeController extends Controller
 {
     public function listAll()
     {
-        $employees = Employee::where('manager_id', 4)->get(); //am_session
+        $employees = Employee::where('manager_id', \Auth::user()->id)->get();
         $dataView 	= [
             'employees'	=>	 $employees
         ];

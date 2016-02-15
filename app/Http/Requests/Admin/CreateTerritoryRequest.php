@@ -24,8 +24,10 @@ class CreateTerritoryRequest extends Request
     public function rules()
     {
         return [
-            'name'  =>  'required',
-            'area'  =>  'required'
+            'name'          =>  'required',
+            'area'          =>  'required',
+            'mr'            =>  'required',
+            'description'   =>  ''
         ];
     }
 }

@@ -15,11 +15,10 @@ class EmployeeController extends Controller
 {
     public function listAll()
     {
-        $AMsIds     =   Employee::select('id')->where('manager_id', 1)->get(); //sm_session
+        $AMsIds     =   Employee::select('id')->where('manager_id', \Auth::user()->id)->get();
 
         $MRs        =   Employee::whereIn('manager_id', $AMsIds)->get();
-        $AMs        =   Employee::where('manager_id', 1)->get(); //sm_session
-
+        $AMs        =   Employee::where('manager_id', \Auth::user()->id)->get();
 
         $dataView 	= [
             'MRs'	=>	$MRs,

@@ -68,19 +68,33 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label">Product</label>
                     <div class="col-md-10">
-                        <select name="products[]" class="form-control select-chosen" multiple>
+                        <select name="product" class="form-control select-chosen">
+                            <option value="">Select Product</option>
                             @foreach($products as $singleProduct)
                                 <option value="{{$singleProduct->id}}">{{$singleProduct->name}}</option>
                             @endforeach
                         </select>
-                        <span class="help-block">
-                            <i class="fa fa-info-circle"></i>
-                            <strong>You can search with multiple products</strong>
-                        </span>
-                        @if($errors->has('products'))
+                        @if($errors->has('product'))
                             <div class="alert alert-danger">
                                 <i class="fa fa-warning"></i>
-                                <strong>Error :</strong> {{$errors->first('products')}}
+                                <strong>Error :</strong> {{$errors->first('product')}}
+                            </div>
+                        @endif
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Doctors</label>
+                    <div class="col-md-10">
+                        <select name="doctor" class="form-control select-chosen">
+                            <option value="">Select Doctor</option>
+                            @foreach($doctors as $singleDoctor)
+                                <option value="{{$singleDoctor->id}}">{{$singleDoctor->name}}</option>
+                            @endforeach
+                        </select>
+                        @if($errors->has('doctor'))
+                            <div class="alert alert-danger">
+                                <i class="fa fa-warning"></i>
+                                <strong>Error :</strong> {{$errors->first('doctor')}}
                             </div>
                         @endif
                     </div>

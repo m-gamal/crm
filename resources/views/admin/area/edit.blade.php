@@ -55,6 +55,26 @@
                     </div>
 
                     <div class="form-group">
+                        <label class="col-md-2 control-label"> Line </label>
+                        <div class="col-md-10">
+                            <select id="example-chosen" name="line" class="select-chosen">
+                                <option value="">Select Line</option>
+                                @foreach($lines as $singleLine)
+                                    <option value="{{$singleLine->id}}" @if($singleLine->id == $area->line_id) selected @endif>
+                                            {{$singleLine->title}}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @if($errors->has('line'))
+                                <div class="alert alert-danger">
+                                    <i class="fa fa-warning"></i>
+                                    <strong>Error :</strong> {{$errors->first('line')}}
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label class="col-md-2 control-label"> Area Manager </label>
                         <div class="col-md-10">
                             <select id="example-chosen" name="am" class="select-chosen">
@@ -68,6 +88,19 @@
                                 <div class="alert alert-danger">
                                     <i class="fa fa-warning"></i>
                                     <strong>Error :</strong> {{$errors->first('am')}}
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Description</label>
+                        <div class="col-md-10">
+                            <textarea type="text" rows="5" name="description" class="form-control">{{$area->description}}</textarea>
+                            @if($errors->has('description'))
+                                <div class="alert alert-danger">
+                                    <i class="fa fa-warning"></i>
+                                    <strong>Error :</strong> {{$errors->first('description')}}
                                 </div>
                             @endif
                         </div>

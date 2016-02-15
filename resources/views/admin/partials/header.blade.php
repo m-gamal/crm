@@ -52,7 +52,7 @@
                     <div class="alert alert-success alert-alt">
                         <a href="{{URL::route('adminShowMessage', $singleMessage->id)}}">
                             <small>{{$singleMessage->time}}</small><br>
-                            <i class="fa fa-envelope"></i> New Message from {{\App\Employee::findOrFail($singleMessage->sender)->name}}!
+                            <i class="fa fa-envelope"></i> New Message
                         </a>
                     </div>
                 </li>
@@ -68,7 +68,7 @@
             </a>
             <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
                 <li>
-                    <a href="{{URL::route('adminLogout')}}"><i class="fa fa-ban fa-fw pull-right"></i> Logout</a>
+                    <a href="{{URL::route('logout')}}"><i class="fa fa-ban fa-fw pull-right"></i> Logout</a>
                 </li>
             </ul>
         </li>

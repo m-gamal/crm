@@ -18,12 +18,12 @@ class CoverageController extends Controller
     public function search()
     {
         $classes        =   VisitClass::all();
-        $employees = Employee::select('id')->where('manager_id', 4)->get(); //am_session
+        $employees = Employee::select('id')->where('manager_id', \Auth::user()->id)->get();
 
         $specialties    =   Customer::select('specialty')->whereIn('mr_id', $employees)->distinct()->get();
 
 
-        $MRs            =   Employee::where('manager_id', 4)->get(); // am_session
+        $MRs            =   Employee::where('manager_id', \Auth::user()->id)->get();
 
         $dataView   =   [
             'classes'       =>  $classes,

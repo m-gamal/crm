@@ -16,25 +16,25 @@
         <!-- Alternative Sidebar Toggle Button -->
         <li>
             <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle">
-                <i class="fa fa-bell fa-2x" @if($amPendingRequests ==1 ) style="color:red; font-size: 18px;" @endif></i>
+                <i class="fa fa-bell fa-2x" @if($mrPendingRequests ==1 ) style="color:red; font-size: 18px;" @endif></i>
             </a>
             <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
                 <li>
                     <div class="alert alert-info alert-alt">
                         <a href="{{URL::route('amPendingPlans')}}">
-                            <i class="fa fa-calendar"></i> Review {{$amCountPendingPlans}} Pending Plans
+                            <i class="fa fa-calendar"></i> Review {{$mrCountPendingPlans}} Pending Plans
                         </a>
                     </div>
 
                     <div class="alert alert-info alert-alt">
                         <a href="{{URL::route('amPendingLeaveRequests')}}">
-                            <i class="fa fa-sign-out"></i> Review {{$amCountPendingLeaveRequests}} Pending Leave Request
+                            <i class="fa fa-sign-out"></i> Review {{$mrCountPendingLeaveRequests}} Pending Leave Request
                         </a>
                     </div>
 
                     <div class="alert alert-info alert-alt">
                         <a href="{{URL::route('amPendingServicesRequests')}}">
-                            <i class="fa fa-reply"></i> Review {{$amCountPendingServicesRequest}} Pending Service Request
+                            <i class="fa fa-reply"></i> Review {{$mrCountPendingServicesRequest}} Pending Service Request
                         </a>
                     </div>
                 </li>
@@ -43,16 +43,20 @@
 
         <li>
             <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle">
-                <i class="fa fa-envelope" style="font-size: 18px;"></i>
-                <span class="label label-primary label-indicator animation-floating">1</span>
+                <i class="fa fa-envelope" style="font-size: 18px; @if(count($unread)) color : red; @endif"></i>
+                @if(count($unread)) <span class="label label-primary label-indicator animation-floating">{{count($unread)}}</span> @endif
             </a>
             <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
-                <li>
-                    <div class="alert alert-success alert-alt">
-                        <small>5 min ago</small><br>
-                        <i class="fa fa-envelope"></i> New Message !
-                    </div>
-                </li>
+                @foreach($unread as $singleMessage)
+                    <li>
+                        <div class="alert alert-success alert-alt">
+                            <a href="{{URL::route('amShowMessage', $singleMessage->id)}}">
+                                <small>{{$singleMessage->time}}</small><br>
+                                <i class="fa fa-envelope"></i> New Message
+                            </a>
+                        </div>
+                    </li>
+                @endforeach
             </ul>
         </li>
 
@@ -64,8 +68,7 @@
             </a>
             <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
                 <li>
-                    <a href="{{URL::route('lock')}}"><i class="fa fa-lock fa-fw pull-right"></i> Lock</a>
-                    <a href="#"><i class="fa fa-ban fa-fw pull-right"></i> Logout</a>
+                    <a href="{{URL::route('logout')}}"><i class="fa fa-ban fa-fw pull-right"></i> Logout</a>
                 </li>
             </ul>
         </li>

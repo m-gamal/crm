@@ -244,11 +244,11 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label">Double Visit with</label>
                         <div class="col-md-10">
-                            <select name="manager" class="form-control select-chosen">
+                            <select name="double_visit_manager" class="form-control select-chosen">
                                 <option value="">Select Manager</option>
-                                <option value="manager_1">Manager 1</option>
-                                <option value="manager_2">Manager 2</option>
-                                <option value="manager_3">Manager 3</option>
+                                @foreach($allManagers as $single)
+                                    <option value="{{$single->id}}">{{$single->name}} [{{$single->level->title}}]</option>
+                                @endforeach
                             </select>
                             @if($errors->has('manager'))
                                 <div class="alert alert-danger">

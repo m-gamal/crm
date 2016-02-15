@@ -106,7 +106,6 @@ class LineController extends Controller
 
         foreach($doctors as $singleDoctor)
         {
-            // mr_session
             $actualVisits [$singleDoctor->id] = Report::where('mr_id', $mr)
                 ->where('month', $currentMonth)
                 ->where('doctor_id', $singleDoctor->id)
@@ -192,7 +191,6 @@ class LineController extends Controller
     public function achievement()
     {
         $dataView  = [
-            // mr_session
             'lines'     =>  Line::all(),
             'MRs'       =>  Employee::where('level_id', 7)->get()
         ];

@@ -12,10 +12,18 @@
     <!-- Datatables Content -->
     <div class="block full">
         <div class="block-title">
+            <div class="block-options pull-right">
+                <a href="{{URL::route('mrExportPlanSearch', 'xlsx')}}">
+                    <img src="{{URL::asset('img/excel.png')}}" alt="">
+                </a>
+                |
+                <a href="{{URL::route('mrExportPlanSearch', 'pdf')}}">
+                    <img src="{{URL::asset('img/pdf.png')}}" alt="">
+                </a>
+            </div>
             <h2>
                 <strong>Plans</strong> Search Result
             </h2>
-
         </div>
 
         @if(Session::has('message'))
@@ -33,6 +41,7 @@
                     <th class="text-center">Month</th>
                     <th class="text-center">Date</th>
                     <th class="text-center">Doctor</th>
+                    <th class="text-center">Comment</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -41,7 +50,14 @@
                         <tr>
                             <td class="text-center">{{$singlePlan->month}}</td>
                             <td class="text-center">{{$singlePlan->date}}</td>
-                            <td class="text-center">{!!$singlePlan->doctors !!}</td>
+                            <td class="text-center">
+                                @foreach((array)json_decode($singlePlan->doctors) as $singleDoctor)
+                                    <label class="label label-success">
+                                        {{\App\Customer::findOrFail($singleDoctor)->name}}
+                                    </label>
+                                @endforeach
+                            </td>
+                            <td class="text-center">{{$singlePlan->comment}}</td>
                         </tr>
                     @endforeach
                 @endif
@@ -52,6 +68,16 @@
 
     <div class="block full">
         <div class="block-title">
+            <div class="block-options pull-right">
+                <a href="{{URL::route('mrExportLeaveRequestSearch','xlsx')}}">
+                    <img src="{{URL::asset('img/excel.png')}}" alt="">
+                </a>
+                |
+                <a href="{{URL::route('mrExportLeaveRequestSearch','pdf')
+                        }}">
+                    <img src="{{URL::asset('img/pdf.png')}}" alt="">
+                </a>
+            </div>
             <h2>
                 <strong>Leave Requests </strong> Search Result
             </h2>

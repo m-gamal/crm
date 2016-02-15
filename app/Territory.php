@@ -28,4 +28,17 @@ class Territory extends Model
     {
         return $this->belongsTo('App\Area');
     }
+
+    /**
+     * The territory belongs to area
+     */
+    public function mr()
+    {
+        return $this->belongsTo('App\Employee', 'mr_id');
+    }
+
+    public function getDateAttribute($date)
+    {
+        return \Carbon\Carbon::parse($date)->format('d-m-Y');
+    }
 }

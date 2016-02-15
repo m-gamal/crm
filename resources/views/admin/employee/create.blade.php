@@ -155,7 +155,7 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label">Hiring Date</label>
                         <div class="col-md-10">
-                            <input type="text" id="example-datepicker" name="hiring_date" class="form-control input-datepicker" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd" value="{{ old('hiring_date') }}">
+                            <input type="text" id="example-datepicker" name="hiring_date" class="form-control input-datepicker" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" value="{{ old('hiring_date') }}">
 
                             @if($errors->has('hiring_date'))
                                 <div class="alert alert-danger">
@@ -169,7 +169,7 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label">Leaving Date</label>
                         <div class="col-md-10">
-                            <input type="text" id="example-datepicker" name="leaving_date" class="form-control input-datepicker" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd" value="{{ old('leaving_date') }}">
+                            <input type="text" id="example-datepicker" name="leaving_date" class="form-control input-datepicker" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" value="{{ old('leaving_date') }}">
 
                             @if($errors->has('leaving_date'))
                                 <div class="alert alert-danger">

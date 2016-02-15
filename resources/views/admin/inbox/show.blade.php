@@ -66,9 +66,7 @@
                         <td class="hidden-xs">
                             <strong>
                                 <label class="label label-danger">
-                                {{\App\Employee::findOrFail($singleReply->sender)->name}}
-                                to
-                                <i>{{\App\Employee::findOrFail($singleReply->message->receiver)->name}}</i>
+                                    from  {{\App\Employee::findOrFail($singleReply->sender)->name}}
                                 </label>
                             </strong>
                         </td>

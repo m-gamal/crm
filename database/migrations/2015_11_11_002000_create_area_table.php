@@ -17,6 +17,7 @@ class CreateAreaTable extends Migration
             $table->string('name');
             $table->integer('line_id')->unsigned();
             $table->integer('am_id')->unsigned();
+            $table->text('description');
             $table->timestamps();
         });
 

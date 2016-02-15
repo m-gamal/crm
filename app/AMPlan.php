@@ -55,4 +55,9 @@ class AMPlan extends Model
             return "<span class=\"label label-danger\">Declined</span>";
         }
     }
+
+//    public function getDateAttribute($date)
+//    {
+//        return \Carbon\Carbon::parse($date)->format('d-m-Y');
+//    }
 }

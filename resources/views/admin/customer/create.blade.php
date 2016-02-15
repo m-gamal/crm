@@ -110,7 +110,7 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label">Description Name</label>
                         <div class="col-md-10">
-                            <input type="text" name="description_name" class="form-control" placeholder="Email" value="{{ old('description_name') }}">
+                            <input type="text" name="description_name" class="form-control" placeholder="Description Name" value="{{ old('description_name') }}">
                             @if($errors->has('description_name'))
                                 <div class="alert alert-danger">
                                     <i class="fa fa-warning"></i>
@@ -226,6 +226,37 @@
                                 <div class="alert alert-danger">
                                     <i class="fa fa-warning"></i>
                                     <strong>Error :</strong> {{$errors->first('mr')}}
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"> Time Of Visit </label>
+                        <div class="col-md-10">
+                            <div class="input-group bootstrap-timepicker">
+                                <input type="text" name="time_of_visit" class="form-control input-timepicker24" placeholder="Time Of Visit">
+                                <span class="input-group-btn">
+                                    <a href="javascript:void(0)" class="btn btn-primary"><i class="fa fa-clock-o"></i></a>
+                                </span>
+                            </div>
+                            @if($errors->has('time_of_visit'))
+                                <div class="alert alert-danger">
+                                    <i class="fa fa-warning"></i>
+                                    <strong>Error :</strong> {{$errors->first('time_of_visit')}}
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Comment</label>
+                        <div class="col-md-10">
+                            <textarea type="text" rows="5" name="comment" class="form-control"></textarea>
+                            @if($errors->has('comment'))
+                                <div class="alert alert-danger">
+                                    <i class="fa fa-warning"></i>
+                                    <strong>Error :</strong> {{$errors->first('comment')}}
                                 </div>
                             @endif
                         </div>

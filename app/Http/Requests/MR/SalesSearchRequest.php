@@ -26,7 +26,7 @@ class SalesSearchRequest extends Request
         return [
             'date_from' =>  'required',
             'date_to'   =>  'required',
-            'products'  =>  'required'
+            'product'   =>  'required'
         ];
     }
 }

@@ -7,15 +7,18 @@
             <div class="sidebar-section sidebar-user clearfix sidebar-nav-mini-hide">
                 <div class="sidebar-user-avatar">
                     <a href="#">
-                        <img src="{{URL::asset('img/placeholders/avatars/avatar2.jpg')}}" alt="avatar">
+                        @if(\Auth::user()->id)
+                            <img src="{{URL::asset('img/avatar/'.\Auth::user()->id)}}" alt="avatar">
+                        @else
+                            <img src="{{URL::asset('img/placeholders/avatars/avatar2.jpg')}}" alt="avatar">
+                        @endif
                     </a>
                 </div>
-                <div class="sidebar-user-name">Sales Manager</div>
+                <div class="sidebar-user-name">{{\Auth::user()->name}}</div>
                 <div class="sidebar-user-links">
-                    <a href="{{URL::route('inbox')}}" data-toggle="tooltip" data-placement="bottom" title="Messages"><i class="gi gi-envelope"></i></a>
-                    <!-- Opens the user settings modal that can be found at the bottom of each page (page_footer.html in PHP version) -->
-
-                    <a href="#" data-toggle="tooltip" data-placement="bottom" title="Logout"><i class="gi gi-exit"></i></a>
+                    <a href="{{URL::route('smProfile')}}" data-toggle="tooltip" data-placement="bottom" title="Edit Profile"><i class="fa fa-user"></i></a>
+                    <a href="{{URL::route('smInbox')}}" data-toggle="tooltip" data-placement="bottom" title="Messages"><i class="gi gi-envelope"></i></a>
+                    <a href="{{URL::route('logout')}}" data-toggle="tooltip" data-placement="bottom" title="Logout"><i class="gi gi-exit"></i></a>
                 </div>
             </div>
             <!-- END User Info -->
@@ -41,7 +44,7 @@
                     </a>
                 </li>
                 <li id="customer">
-                    <a href="{{URL::route('smCustomers')}}">
+                    <a href="{{URL::route('smSearchCustomer')}}">
                         <i class="fa fa-stethoscope sidebar-nav-icon"></i>
                         <span class="sidebar-nav-mini-hide">Customers</span>
                     </a>
@@ -65,39 +68,17 @@
                     </a>
                 </li>
 
-                <li id="set_target">
-                    <a href="#" class="sidebar-nav-menu">
-                        <i class="fa fa-angle-left sidebar-nav-indicator sidebar-nav-mini-hide"></i>
-                        <i class="fa fa-calculator sidebar-nav-icon"></i>
-                        <span class="sidebar-nav-mini-hide">Set Target</span>
-                    </a>
-                    <ul>
-                        <li id="set_product_target">
-                            <a href="{{URL::route('setProductTarget')}}">
-                                <i class="fa fa-cube"></i>
-                                Product Target
-                            </a>
-                        </li>
-                        <li id="set_area_target">
-                            <a href="{{URL::route('setAreaTarget')}}">
-                                <i class="fa fa-road"></i>
-                                Area Target
-                            </a>
-                        </li>
-                        <li id="set_territory_target">
-                            <a href="{{URL::route('setTerritoryTarget')}}">
-                                <i class="fa fa-building"></i>
-                                Territory Target
-                            </a>
-                        </li>
-                    </ul>
-                </li>
 
                 <li class="sidebar-header">
                     <span class="sidebar-header-title">Visits</span>
                 </li>
 
-
+                <li id="plan">
+                    <a href="{{URL::route('smPlans')}}">
+                        <i class="fa fa-calendar sidebar-nav-icon"></i>
+                        <span class="sidebar-nav-mini-hide">Plans</span>
+                    </a>
+                </li>
                 <li id="report">
                     <a href="{{URL::route('smReports')}}">
                         <i class="fa fa-file sidebar-nav-icon"></i>

@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CreateAreaRequest;
 use App\Http\Requests\Admin\EditAreaRequest;
 use App\Area;
+use App\Line;
 use App\Territory;
 use App\ProductTarget;
 use App\AreaTarget;
@@ -65,9 +66,12 @@ class AreaController extends Controller
 
     public function create()
     {
-        $AMs = Employee::where('level_id', 3)->active()->get();
+        $AMs    =   Employee::where('level_id', 3)->active()->get();
+        $lines  =   Line::all();
+
         $dataView = [
-            'AMs'   =>  $AMs
+            'AMs'   =>  $AMs,
+            'lines' =>  $lines
         ];
         return view('admin.area.create', $dataView);
     }
@@ -76,25 +80,28 @@ class AreaController extends Controller
     {
         $area   =   new Area;
 
-        $area->name     =   $request->name;
-        $area->am_id    =   $request->am;
-
+        $area->name         =   $request->name;
+        $area->line_id      =   $request->line;
+        $area->am_id        =   $request->am;
+        $area->description  =   $request->description;
         try {
             $area->save();
             return redirect()->back()->with('message','Area has been added successfully !');
         } catch (ParseException $ex) {
-            echo 'Failed to create new meal , with error message: ' . $ex->getMessage();
+            echo 'Failed to create new area , with error message: ' . $ex->getMessage();
         }
     }
 
     public function update($id)
     {
-        $area = Area::findOrFail($id);
-        $AMs = Employee::where('level_id', 3)->active()->get();
+        $area   =   Area::findOrFail($id);
+        $AMs    =   Employee::where('level_id', 3)->active()->get();
+        $lines  =   Line::all();
 
         $dataView 	= [
             'area'	=>  $area,
-            'AMs'   =>  $AMs
+            'AMs'   =>  $AMs,
+            'lines' =>  $lines
         ];
 
         return view('admin.area.edit', $dataView);
@@ -103,14 +110,16 @@ class AreaController extends Controller
     public function doUpdate(EditAreaRequest $request, $id)
     {
         $area   =   Area::findOrFail($id);
-        $area->name     =   $request->name;
-        $area->am_id    =   $request->am;
+        $area->name         =   $request->name;
+        $area->line_id      =   $request->line;
+        $area->am_id        =   $request->am;
+        $area->description  =   $request->description;
 
         try {
             $area->save();
             return redirect()->route('areas')->with('message','Area has been updated successfully !');
         } catch (ParseException $ex) {
-            echo 'Failed to create new meal , with error message: ' . $ex->getMessage();
+            echo 'Failed to update this area , with error message: ' . $ex->getMessage();
         }
     }
 
@@ -122,7 +131,7 @@ class AreaController extends Controller
             $area->delete();
             return redirect()->back()->with('message','Area has been deleted successfully !');
         } catch (ParseException $ex) {
-            echo 'Failed to create new meal , with error message: ' . $ex->getMessage();
+            echo 'Failed to delete this area , with error message: ' . $ex->getMessage();
         }
     }
 }

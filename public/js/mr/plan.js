@@ -9,7 +9,8 @@ $('#calendar').fullCalendar({
         center: 'title',
         right: 'month,agendaWeek,agendaDay'
     },
-    firstDay: 0,
+    firstDay: 6,
+    hiddenDays: [ 4, 5 ],
     events: config.routes[0].plan,
     defaultView : 'month'
 });

@@ -301,6 +301,7 @@
                                                         <th class="text-center">Name</th>
                                                         <th class="text-center">Sold Quantity</th>
                                                         <th class="text-center">Target</th>
+                                                        <th class="text-center">Achievement</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -309,11 +310,17 @@
                                                             <td class="text-center">{{$product}}</td>
                                                             <td class="text-center">{{$quantity}} Units</td>
                                                             <td class="text-center">
-                                                               @if (\App\Employee::target(2015, \App\Product::select('id')->where('name', $product)->first()->id, \App\Territory::select('id')->where('mr_id', $mr)->first()->id))
-                                                               {{\App\Employee::target(2015, \App\Product::select('id')->where('name', $product)->first()->id, \App\Territory::select('id')->where('mr_id', $mr)->first()->id)['Dec']}}
+                                                               @if (\App\Employee::target(Request::segment(4), \App\Product::select('id')->where('name', $product)->first()->id, \App\Territory::select('id')->where('mr_id', $mr)->first()->id))
+                                                               {{\App\Employee::target(Request::segment(4), \App\Product::select('id')->where('name', $product)->first()->id, \App\Territory::select('id')->where('mr_id', $mr)->first()->id)}}
                                                                @endif
                                                             </td>
-
+                                                            <td class="text-center">
+                                                                @if(\App\Employee::target(\Request::segment(4),
+                                                                \App\Product::where('name', $product)->first()->id,
+                                                                \App\Territory::where('mr_id', \Request::segment(3))->first()->id) != 0 )
+                                                                    {{($quantity / \App\Employee::target(\Request::segment(4),\App\Product::where('name', $product)->first()->id,\App\Territory::where('mr_id', \Request::segment(3))->first()->id)) .'%'}}
+                                                                @endif
+                                                            </td>
                                                         </tr>
                                                     @endforeach
                                                     </tbody>

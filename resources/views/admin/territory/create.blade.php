@@ -70,6 +70,36 @@
                             @endif
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"> Medical Rep. </label>
+                        <div class="col-md-10">
+                            <select id="example-chosen" name="mr" class="select-chosen">
+                                <option value="">Select Medical Rep.</option>
+                                @foreach($MRs as $singleMR)
+                                    <option value="{{$singleMR->id}}">{{$singleMR->name}}</option>
+                                @endforeach
+                            </select>
+                            @if($errors->has('mr'))
+                                <div class="alert alert-danger">
+                                    <i class="fa fa-warning"></i>
+                                    <strong>Error :</strong> {{$errors->first('mr')}}
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Description</label>
+                        <div class="col-md-10">
+                            <textarea type="text" rows="5" name="description" class="form-control"></textarea>
+                            @if($errors->has('description'))
+                                <div class="alert alert-danger">
+                                    <i class="fa fa-warning"></i>
+                                    <strong>Error :</strong> {{$errors->first('description')}}
+                                </div>
+                            @endif
+                        </div>
+                    </div>
                     <div class="form-group form-actions">
                         <div class="col-md-9 col-md-offset-3">
                             <button type="submit" class="btn btn-sm btn-primary">

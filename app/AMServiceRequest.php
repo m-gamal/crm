@@ -36,4 +36,14 @@ class AMServiceRequest extends Model
             return "<span class=\"label label-info\">Pending</span>";
         }
     }
+
+    public function emp()
+    {
+        return $this->belongsTo('App\Employee', 'am_id');
+    }
+
+    public function getDateAttribute($date)
+    {
+        return \Carbon\Carbon::parse($date)->format('d-m-Y');
+    }
 }

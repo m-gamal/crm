@@ -34,7 +34,9 @@ All Areas
                 <thead>
                 <tr>
                     <th class="text-center">Name</th>
+                    <th class="text-center">Line</th>
                     <th class="text-center">Area Manager</th>
+                    <th class="text-center">Description</th>
                     <th class="text-center">Actions</th>
                 </tr>
                 </thead>
@@ -43,7 +45,9 @@ All Areas
                 @foreach($areas as $singleArea)
                 <tr>
                     <td class="text-center">{{$singleArea->name}}</td>
+                    <td class="text-center">{{$singleArea->line->title}}</td>
                     <td class="text-center">{{$singleArea->am->name}}</td>
+                    <td class="text-center">{{$singleArea->description}}</td>
                     <td class="text-center">
                         <div class="btn-group">
                             <a href="{{URL::route('editArea', $singleArea->id)}}" data-toggle="tooltip" title="Edit" class="btn btn-xs btn-default"><i class="fa fa-pencil"></i></a>
@@ -87,6 +91,6 @@ All Areas
 
 @section('custom_footer_scripts')
 <script>$('#area').addClass('active');</script>
-<script src="js/pages/tablesDatatables.js"></script>
+<script src="{{URL::asset('js/pages/tablesDatatables.js')}}"></script>
 <script>$(function(){ TablesDatatables.init(); });</script>
 @endsection

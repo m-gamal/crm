@@ -1,4 +1,4 @@
-@extends('sm.layouts.master')
+@extends('am.layouts.master')
 @section('title')
 All Customers
 @endsection
@@ -7,13 +7,22 @@ All Customers
     <!-- Begin Breadcrumb -->
     <ul class="breadcrumb breadcrumb-top">
         <li><a href="{{URL::route('/')}}">Dashboard</a></li>
-        <li><a href="{{URL::route('smCustomers')}}">All Customers</a></li>
+        <li><a href="{{URL::route('amCustomers')}}">All Customers</a></li>
     </ul>
     <!-- END Breadcrumb -->
 
     <!-- Datatables Content -->
     <div class="block full">
         <div class="block-title">
+            <div class="block-options pull-right">
+                <a href="{{URL::route('amExportCustomerSearch', 'xlsx')}}">
+                    <img src="{{URL::asset('img/excel.png')}}" alt="">
+                </a>
+                |
+                <a href="{{URL::route('amExportCustomerSearch', 'pdf')}}">
+                    <img src="{{URL::asset('img/pdf.png')}}" alt="">
+                </a>
+            </div>
             <h2>
                 <strong>All</strong> Customers
             </h2>
@@ -45,7 +54,11 @@ All Customers
                 @if(count($customers) > 0)
                 @foreach($customers as $singleCustomer)
                 <tr>
-                    <td class="text-center">{{$singleCustomer->name}}</td>
+                    <td class="text-center">
+                        <a href="{{URL::route('amSingleDoctor', $singleCustomer->id)}}">
+                            {{$singleCustomer->name}}
+                        </a>
+                    </td>
                     <td class="text-center">{{$singleCustomer->class}}</td>
                     <td class="text-center">{{$singleCustomer->specialty}}</td>
                     <td class="text-center">{{$singleCustomer->email}}</td>
@@ -65,6 +78,6 @@ All Customers
 
 @section('custom_footer_scripts')
 <script>$('#customer').addClass('active');</script>
-<script src="js/pages/tablesDatatables.js"></script>
+<script src="{{URL::asset('js/pages/tablesDatatables.js')}}"></script>
 <script>$(function(){ TablesDatatables.init(); });</script>
 @endsection

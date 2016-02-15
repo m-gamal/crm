@@ -74,7 +74,7 @@ All Reports
                         @if(count($MRReports) > 0)
                             @foreach($MRReports as $singleReport)
                                 <tr>
-                                    <td class="text-center"><a href="{{URL::route('amMRSingleReport', $singleReport->id)}}">{{$singleReport->id}}</a></td>
+                                    <td class="text-center"><a href="{{URL::route('smMRSingleReport', $singleReport->id)}}">{{$singleReport->id}}</a></td>
                                     <td class="text-center">{{$singleReport->mr->name}}</td>
                                     <td class="text-center">{{$singleReport->month}}</td>
                                     <td class="text-center">{{$singleReport->date}}</td>
@@ -109,7 +109,7 @@ All Reports
                             @if(count($AMReports) > 0)
                                 @foreach($AMReports as $singleReport)
                                     <tr>
-                                        <td class="text-center"><a href="{{URL::route('amYourSingleReport', $singleReport->id)}}">{{$singleReport->id}}</a></td>
+                                        <td class="text-center"><a href="{{URL::route('smAMSingleReport', $singleReport->id)}}">{{$singleReport->id}}</a></td>
                                         <td class="text-center">{{$singleReport->am->name}}</td>
                                         <td class="text-center">{{$singleReport->month}}</td>
                                         <td class="text-center">{{$singleReport->date}}</td>

@@ -33,8 +33,7 @@ class ProductController extends Controller
     public $month ;
     public function listAll()
     {
-    	$employees = Employee::select('line_id')->where('manager_id', 4)->get(); //am_session
-
+    	$employees = Employee::select('line_id')->where('manager_id', \Auth::user()->id)->get();
         $products = Product::whereIn('line_id', $employees)->get();
 
         $dataView 	= [
@@ -275,6 +274,10 @@ class ProductController extends Controller
 //
     public function listAllDistributors()
     {
+        $ibnsAreas          =   [];
+        $posAreas           =   [];
+        $ucpAreas           =   [];
+
         // IBNS
         $ibnsProducts       =   IBNS::select('product_name', 'code')->distinct()->get()->toArray();
         foreach($ibnsProducts as $singleProduct)

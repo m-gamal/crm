@@ -22,25 +22,27 @@ class PlanController extends Controller
 
     public function ajaxPlans()
     {
-        $arr = array();
-        $plans =    Plan::where('mr_id', 3)->approved()->get(); // mr_session
-        $leave =    LeaveRequest::where('mr_id', 3)->approved()->get();
+        $arr    =   array();
+        $plans  =   Plan::where('mr_id', \Auth::user()->id)->approved()->get();
+        $leave  =   LeaveRequest::where('mr_id', \Auth::user()->id)->approved()->get();
 
         $i = 0;
         foreach($plans as $singlePlan)
         {
+            $arr[$i]['title']   =   $singlePlan->comment;
+            $arr[$i]['start']   =   $singlePlan['date'];
+            $arr[$i]['color']   =   'black';
+            $i++;
             foreach(json_decode($singlePlan['doctors']) as $singleDoctorId)
             {
                 $color  =   $this->isDoctorVisited($singleDoctorId, $singlePlan['date']) == true ? 'green' : 'red';
                 $url    =   ($this->isDoctorVisited($singleDoctorId, $singlePlan['date']) != true)
                             ? \URL::route('addReport', $singleDoctorId) : NULL;
 
-
-
-                $arr[$i]['url']     =    $url;
-                $arr[$i]['title']   =    Customer::findOrFail($singleDoctorId)->name;
-                $arr[$i]['start']   =    $singlePlan['date'];
-                $arr[$i]['color']   =    $color;
+                $arr[$i]['url']     =   $url;
+                $arr[$i]['title']   =   Customer::findOrFail($singleDoctorId)->name;
+                $arr[$i]['start']   =   $singlePlan['date'];
+                $arr[$i]['color']   =   $color;
                 $i++;
             }
         }
@@ -60,8 +62,7 @@ class PlanController extends Controller
 
      public function isDoctorVisited($doctorId, $date)
      {
-            // mr_session
-            $visited = Report::where('mr_id', '3')->where('doctor_id', $doctorId)->where('date', '>=', $date)->count();
+            $visited = Report::where('mr_id', \Auth::user()->id)->where('doctor_id', $doctorId)->where('date', '>=', $date)->count();
             if ($visited > 0){
                   return true;
             }
@@ -70,7 +71,7 @@ class PlanController extends Controller
 
     public function create()
     {
-        $doctors = Customer::where('mr_id', 3)->get(); // mr_session
+        $doctors = Customer::where('mr_id', \Auth::user()->id)->get();
         $dataView  = [
             'doctors' =>  $doctors
         ];
@@ -81,15 +82,15 @@ class PlanController extends Controller
     {
         $plan   =   new Plan();
 
-        $plan->mr_id    =   '3'; // mr_session
+        $plan->mr_id    =   \Auth::user()->id;
         $plan->month    =   $request->month.'-'.$request->year;
         $plan->date     =   $request->date;
         $plan->doctors  =   json_encode($request->doctors);
-        $plan->approved =   0;
+        $plan->comment  =   $request->comment;
 
         try {
             $plan->save();
-            return redirect()->back()->with('message','Visit Plan has been sent to your managers successfully! . Wait for approval');
+            return redirect()->route('addPlan')->with('message','Visit Plan has been sent to your managers successfully! . Wait for approval');
         } catch (ParseException $ex) {
             echo 'Failed to create new plan , with error message: ' . $ex->getMessage();
         }
@@ -107,7 +108,6 @@ class PlanController extends Controller
         $from                       =   $request->date_from;
         $to                         =   $request->date_to;
 
-        // mr_session
         $allSearchedPlan = Plan::where('date', '>=', $from)
             ->where('date', '<=', $to)
             ->approved()
@@ -133,6 +133,12 @@ class PlanController extends Controller
             'planSearchResult'          =>  $planSearchResult,
             'leaveRequestSearchResult'  =>  $leaveRequestSearchResult
         ];
+
+        \Session::flash('date_from', $from);
+        \Session::flash('date_to', $to);
+        \Session::flash('planSearchResult', $planSearchResult);
+        \Session::flash('leaveRequestSearchResult', $leaveRequestSearchResult);
+
         return view('mr.search.plans.result', $dataView);
     }
 }

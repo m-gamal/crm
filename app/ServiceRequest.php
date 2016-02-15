@@ -30,7 +30,7 @@ class ServiceRequest extends Model
 
     public function emp()
     {
-        return $this->belongsTo('App\Employee');
+        return $this->belongsTo('App\Employee', 'mr_id');
     }
 
     public static function scopePending($query)
@@ -48,5 +48,10 @@ class ServiceRequest extends Model
         } else if ( $approved == NULL){
             return "<span class=\"label label-info\">Pending</span>";
         }
+    }
+
+    public function getDateAttribute($date)
+    {
+        return \Carbon\Carbon::parse($date)->format('d-m-Y');
     }
 }

@@ -12,31 +12,71 @@ use App\Customer;
 use App\Report;
 use Config;
 use Illuminate\Support\Facades\Redirect;
+use App\VisitClass;
+use App\ProductTarget;
+use App\AreaTarget;
+use App\TerritoryTarget;
 
 class LineController extends Controller
 {
+    public static function target()
+    {
+        $product = 1;
+        $territory = 1;
+
+        $productTarget      =   ProductTarget::select('id', 'quantity')
+            ->where('product_id', $product)
+            ->where('year', 2015)
+            ->first();
+
+        $areaTarget         =   AreaTarget::select('id', 'percent', 'months_target')
+            ->where('product_target_id', $productTarget['id'])
+            ->first();
+
+        $areaUnits          =   $areaTarget['percent'] * $productTarget['quantity'];
+
+        $territoryTarget    =   TerritoryTarget::select('id', 'percent', 'months_target')
+            ->where('area_target_id', $areaTarget['id'])
+            ->where('territory_id', $territory)
+            ->first();
+
+        $territoryUnits     =   $areaUnits * $territoryTarget['percent'];
+        $target ['jan']     =   $territoryUnits * json_decode($territoryTarget['months_target']->jan);
+        $target ['feb']     =   $territoryUnits * json_decode($territoryTarget['months_target']->feb);
+        $target ['mar']     =   $territoryUnits * json_decode($territoryTarget['months_target']->mar);
+        $target ['apr']     =   $territoryUnits * json_decode($territoryTarget['months_target']->apr);
+        $target ['may']     =   $territoryUnits * json_decode($territoryTarget['months_target']->may);
+        $target ['jun']     =   $territoryUnits * json_decode($territoryTarget['months_target']->jun);
+        $target ['jul']     =   $territoryUnits * json_decode($territoryTarget['months_target']->jul);
+        $target ['aug']     =   $territoryUnits * json_decode($territoryTarget['months_target']->aug);
+        $target ['sep']     =   $territoryUnits * json_decode($territoryTarget['months_target']->sep);
+        $target ['oct']     =   $territoryUnits * json_decode($territoryTarget['months_target']->oct);
+        $target ['nov']     =   $territoryUnits * json_decode($territoryTarget['months_target']->nov);
+        $target ['dec']     =   $territoryUnits * json_decode($territoryTarget['months_target']->dec);
+        return $target;
+    }
+
     public function single($currentMonth)
     {
         $actualVisits               =   [];
         $MonthlyCustomerProducts    =   [];
 
-        $doctors                    =   Customer::where('mr_id', 3)->get(); // mr_session;
+        $doctors                    =   Customer::where('mr_id', \Auth::user()->id)->get();;
 
         foreach($doctors as $singleDoctor)
         {
-            // mr_session
-            $actualVisits [$singleDoctor->id] = Report::where('mr_id', 3)
+
+            $actualVisits [$singleDoctor->id] = Report::where('mr_id', \Auth::user()->id)
                     ->where('month', $currentMonth)
                     ->where('doctor_id', $singleDoctor->id)
                     ->count();
             $MonthlyCustomerProducts[$singleDoctor->id]    =   Customer::monthlyProductsBought([$singleDoctor->id])->toArray();
         }
 
-
-        $products                   =   Product::where('line_id', Employee::findOrFail(3)->line_id)->get(); // mr_session;
-        $coverageStats              =   Employee::coverageStats($currentMonth);
-        $allManagers                =   Employee::yourManagers();
-        $totalProducts              =   Employee::monthlyDirectSales($currentMonth);
+        $products                   =   Product::where('line_id', Employee::findOrFail(\Auth::user()->id)->line_id)->get();
+        $coverageStats              =   Employee::coverageStats(\Auth::user()->id, $currentMonth);
+        $allManagers                =   Employee::yourManagers(\Auth::user()->id);
+        $totalProducts              =   Employee::monthlyDirectSales(\Auth::user()->id, $currentMonth);
 
         $totalSoldProductsSales     =   $totalProducts['totalSoldProductsSales'];
         $totalSoldProductsSalesPrice=   $totalProducts['totalSoldProductsSalesPrice'];
@@ -59,14 +99,80 @@ class LineController extends Controller
 
     public function ajaxCoverageBySpecialty()
     {
-        return json_encode(Employee::specialtyCoverageStats());
+        return json_encode(Employee::specialtyCoverageStats(\Auth::user()->id));
+    }
+
+    public function specialtyCoverageStats($mrId)
+    {
+        $totalVisits        =   [];
+        $actualVisits       =   [];
+        $specialtyCoverage  =   [];
+        $specialty          =   NULL;
+        $counter            =   0;
+
+        $allSpecialties = Customer::select('specialty')->where('mr_id', $mrId)->get()->toArray();
+        $allCustomersSpecialties = Customer::whereIn('specialty', $allSpecialties)->get()->toArray();
+
+        // Get all medical rep customers specialties
+        foreach($allCustomersSpecialties as $singleCustomer)
+        {
+            $allSpecialtyClasses[$singleCustomer['specialty']]          =   Customer::select('class')->where('specialty', $singleCustomer['specialty'])->get()->toArray();
+        }
+
+        // Get all customer classes based on specialty
+        foreach($allSpecialtyClasses as $specialty => $specialtyClasses)
+        {
+            // Calculate total visits based on classes and specialty
+            foreach($specialtyClasses as $singleSpecialtyClass) {
+                if (isset($totalVisits[$specialty])) {
+                    $totalVisits[$specialty] += VisitClass::where('name', $singleSpecialtyClass)->first()->visits_count;
+                } else {
+                    $totalVisits[$specialty] = VisitClass::where('name', $singleSpecialtyClass)->first()->visits_count;
+                }
+            }
+        }
+
+        // Get all doctors visited
+        $doctorsVisited = Report::select('doctor_id')->where('month', date('M-Y'))->where('mr_id', $mrId)->get()->toArray();
+
+        foreach($doctorsVisited as $singleDoctor)
+        {
+            // calculate actual visits
+            $specialty = Customer::select('specialty')->findOrFail($singleDoctor)->first()->specialty;
+            if (isset($actualVisits[$specialty])) {
+                $actualVisits[$specialty] += 1;
+            } else {
+                $actualVisits[$specialty] = 1;
+            }
+        }
+
+        foreach($allCustomersSpecialties as $singleCustomerSpecialty)
+        {
+            $specialty = $singleCustomerSpecialty['specialty'];
+            $specialtyCoverage [$specialty] = 0;
+            if (isset($specialtyCoverage [$specialty]) &&
+                isset($actualVisits[$specialty]) &&
+                isset($totalVisits[$specialty])) {
+                $specialtyCoverage [$specialty] = number_format(($actualVisits[$specialty] / $totalVisits[$specialty]) * 100, 2);
+            }
+        }
+
+        foreach ($specialtyCoverage as $specialty=>$percentage)
+        {
+            if (isset($specialtyCoverage [$specialty])) {
+                $stats[$counter]['label']   =   $specialty;
+                $stats[$counter]['data']    =   $percentage;
+            }
+            $counter++;
+        }
+
+        return $stats;
     }
 
     public function history()
     {
         $dataView  = [
-            // mr_session
-            'mr'   =>  Employee::where('id', 3)->where('level_id', 7)->first()
+            'mr'   =>  Employee::where('id', \Auth::user()->id)->where('level_id', 7)->first()
         ];
         return view('mr.line.history.search', $dataView);
     }
@@ -82,7 +188,7 @@ class LineController extends Controller
         $month = \Carbon\Carbon::parse($month.'-'.$year);
 
         $line = MrLines::select('id', 'from', 'to')
-                        ->where('mr_id', 3)
+                        ->where('mr_id', \Auth::user()->id)
                         ->where('line_id', $line)
                         ->first();
 

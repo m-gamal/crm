@@ -58,4 +58,5 @@ class SMPlan extends Model
             return "<span class=\"label label-danger\">Declined</span>";
         }
     }
+
 }

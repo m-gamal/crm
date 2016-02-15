@@ -76,7 +76,6 @@ Single Doctor
                 <div class="form-group">
                     <label class="col-md-3 control-label">Address On Map</label>
                     <div class="col-md-9">
-                        {{--<div id="map" style="width: 500px;height: 400px;"></div>--}}
                         <img class='group-google-maps-preview' src='https://maps.googleapis.com/maps/api/staticmap?size=500x400&center={{$doctor->address}}&zoom=13&size=600x300&maptype=roadmap&markers=color:blue'>
                     </div>
                 </div>
@@ -112,7 +111,7 @@ Single Doctor
                 <div class="form-group">
                     <label class="col-md-3 control-label">A.M Working </label>
                     <div class="col-md-9">
-                        <p class="form-control-static">{{$doctor->am_Working}}</p>
+                        <p class="form-control-static">{{$doctor->am_working}}</p>
                     </div>
                 </div>
 

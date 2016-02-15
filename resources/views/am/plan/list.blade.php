@@ -1,4 +1,4 @@
-@extends('admin.layouts.master')
+@extends('am.layouts.master')
 @section('title')
 All Plans
 @endsection

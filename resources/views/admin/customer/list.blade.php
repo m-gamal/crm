@@ -14,11 +14,19 @@ All Customers
     <!-- Datatables Content -->
     <div class="block full">
         <div class="block-title">
+            <div class="block-options pull-right">
+                <a href="{{URL::route('adminExportCustomerSearch', 'xlsx')}}">
+                    <img src="{{URL::asset('img/excel.png')}}" alt="">
+                </a>
+                |
+                <a href="{{URL::route('adminExportCustomerSearch', 'pdf')}}">
+                    <img src="{{URL::asset('img/pdf.png')}}" alt="">
+                </a>
+            </div>
             <h2>
                 <strong>All</strong> Customers
                 <a href="{{URL::route('addCustomer')}}" class="label label-success" title="Add New Customers">+</a>
             </h2>
-
         </div>
 
         @if(Session::has('message'))

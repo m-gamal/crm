@@ -49,7 +49,7 @@
                     @foreach($pendingPlans as $singlePlan)
                         <tr>
                             <td class="text-center">{{$singlePlan->date}}</td>
-                            <td class="text-center">{{$singlePlan->mr->name}}</td>
+                            <td class="text-center">{{$singlePlan->emp->name}}</td>
                             <td class="text-center">
                                 @foreach((array)json_decode($singlePlan->doctors) as $singleDoctor)
                                     <label class="label label-info">

@@ -17,6 +17,18 @@ Single Report
             <div class="block">
                 <!-- Basic Form Elements Title -->
                 <div class="block-title">
+                    <div class="block-options pull-right">
+                        <a href="{{URL::route('mrExportSingleReport',
+                        array(\Request::segment(3), 'xlsx'))}}">
+                            <img src="{{URL::asset('img/excel.png')}}" alt="">
+                        </a>
+                        |
+                        <a href="{{URL::route('mrExportSingleReport',
+                        array(\Request::segment(3), 'pdf'))
+                        }}">
+                            <img src="{{URL::asset('img/pdf.png')}}" alt="">
+                        </a>
+                    </div>
                     <h2><strong>Report</strong> Details </h2>
                 </div>
                 <!-- END Form Elements Title -->
@@ -48,28 +60,52 @@ Single Report
                 <div class="form-group">
                     <label class="col-md-3 control-label">Promoted Products</label>
                     <div class="col-md-9">
-                        <p class="form-control-static">{!! $singleReport->promoted_products !!}</p>
+                        @if($singleReport['promotedProducts'])
+                        @foreach($singleReport['promotedProducts'] as $singlePromotedProduct)
+                            <p class="label label-info">
+                                {{$singlePromotedProduct->product->name}}
+                            </p>
+                        @endforeach
+                        @endif
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-md-3 control-label">Sample Products</label>
                     <div class="col-md-9">
-                        <p class="form-control-static">{!! $singleReport->sample_products  !!}</p>
+                        @if($singleReport['sampleProducts'])
+                        @foreach($singleReport['sampleProducts'] as $singleProduct)
+                        <p class="label label-info">
+                            {{$singleProduct->product->name}}
+                        </p>
+                        @endforeach
+                        @endif
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-md-3 control-label">Gifts</label>
                     <div class="col-md-9">
-                        <p class="form-control-static">{!! $singleReport->gifts !!}</p>
+                        @if($singleReport['gifts'])
+                        @foreach($singleReport['gifts'] as $singleGift)
+                            <p class="label label-info">
+                                {{$singleGift->gift->name}}
+                            </p>
+                        @endforeach
+                        @endif
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-md-3 control-label">Sold Products</label>
                     <div class="col-md-9">
-                        <p class="form-control-static">{!! $singleReport->sold_products !!}</p>
+                        @if($singleReport['soldProducts'])
+                        @foreach($singleReport['soldProducts'] as $singleProduct)
+                            <p class="label label-info">
+                                {{$singleProduct->product->name}} [{{$singleProduct->quantity}} Units]
+                            </p>
+                        @endforeach
+                        @endif
                     </div>
                 </div>
 
@@ -94,12 +130,20 @@ Single Report
                     </div>
                 </div>
 
+                @if(Request::segment(1) == 'mr')
                 <div class="form-group">
                     <label class="col-md-3 control-label">Double Visit with</label>
                     <div class="col-md-9">
                         <p class="form-control-static">
-                            {!! $singleReport->double_visit_manger_id != NULL ? $singleReport->double_visit_manger_id : "<i>N/A</i>" !!}
+                            {!! $singleReport->double_visit_manger_id != 'NULL' ? \App\Employee::findOrFail($singleReport->double_visit_manager_id)->name : "<i>N/A</i>" !!}
                         </p>
+                    </div>
+                </div>
+                @endif
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Location</label>
+                    <div class="col-md-9">
+                        <img class='group-google-maps-preview' src='http://maps.googleapis.com/maps/api/staticmap?size=500x400&center={{$singleReport->lat}},{{$singleReport->lon}}&zoom=16&size=200x200&sensor=false'>
                     </div>
                 </div>
                 {!! Form::close() !!}

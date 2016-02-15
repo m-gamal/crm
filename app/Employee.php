@@ -13,7 +13,6 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Support\Facades\Storage;
 use App\MrLines;
 
-
 class Employee extends Model implements AuthenticatableContract,
     AuthorizableContract,
     CanResetPasswordContract
@@ -114,18 +113,21 @@ class Employee extends Model implements AuthenticatableContract,
 
     public static function coverageStats($mrId, $currentMonth)
     {
-        // mr_session
-        $visitsClassCount   = Customer::select('class')->where('mr_id', $mrId)->get()->toArray();
+        $totalVisitsCount   =   0;
+        $visitsClassCount   =   Customer::select('class')->where('mr_id', $mrId)->get()->toArray();
+        foreach($visitsClassCount as $class)
+        {
+            $totalVisitsCount   +=   VisitClass::where('name', $class)->first()->visits_count;
+        }
 
-        $totalVisitsCount  =   VisitClass::whereIn('name', $visitsClassCount)->sum('visits_count');
 
-        $actualVisitsCount  =   Report::where('mr_id', $mrId) //mr_session
+        $actualVisitsCount  =   Report::where('mr_id', $mrId)
         ->where('month', $currentMonth)
             ->count();
         return  [
                     'totalVisitsCount'      =>  $totalVisitsCount,
                     'actualVisitsCount'     =>  $actualVisitsCount,
-                    'totalMonthlyCoverage'  =>  number_format(($actualVisitsCount/$totalVisitsCount) * 100, 2)
+                    'totalMonthlyCoverage'  =>  $totalVisitsCount != 0 ? number_format(($actualVisitsCount/$totalVisitsCount) * 100, 2) : '0'
                 ];
     }
 
@@ -160,7 +162,8 @@ class Employee extends Model implements AuthenticatableContract,
         }
 
         // Get all doctors visited
-        $doctorsVisited = Report::select('doctor_id')->where('mr_id', $mrId)->get()->toArray();
+        $doctorsVisited = Report::select('doctor_id')->where('month', date('M-Y'))->where('mr_id', $mrId)->get()->toArray();
+
         foreach($doctorsVisited as $singleDoctor)
         {
             // calculate actual visits
@@ -175,13 +178,20 @@ class Employee extends Model implements AuthenticatableContract,
         foreach($allCustomersSpecialties as $singleCustomerSpecialty)
         {
             $specialty = $singleCustomerSpecialty['specialty'];
-            $specialtyCoverage [$specialty] = number_format(($actualVisits[$specialty] / $totalVisits[$specialty]) * 100, 2);
+            $specialtyCoverage [$specialty] = 0;
+            if (isset($specialtyCoverage [$specialty]) &&
+                isset($actualVisits[$specialty]) &&
+                isset($totalVisits[$specialty])) {
+                $specialtyCoverage [$specialty] = number_format(($actualVisits[$specialty] / $totalVisits[$specialty]) * 100, 2);
+            }
         }
 
         foreach ($specialtyCoverage as $specialty=>$percentage)
         {
-            $stats[$counter]['label']   =   $specialty;
-            $stats[$counter]['data']    =   $percentage;
+            if (isset($specialtyCoverage [$specialty])) {
+                $stats[$counter]['label']   =   $specialty;
+                $stats[$counter]['data']    =   $percentage;
+            }
             $counter++;
         }
 
@@ -205,7 +215,7 @@ class Employee extends Model implements AuthenticatableContract,
         foreach($allSoldProducts as $singleReportProducts)
         {
             $productName    =   $singleReportProducts->product->name;
-            $productPrice   =   $singleReportProducts->product->price;
+            $productPrice   =   $singleReportProducts->product->unit_price;
             $quantity       =   $singleReportProducts->quantity;
 
             $totalSoldProductsSalesPrice += ($quantity * $productPrice);
@@ -222,41 +232,49 @@ class Employee extends Model implements AuthenticatableContract,
         ];
     }
 
-    public static function target($year, $product, $territory)
+    public static function target($current_month, $product, $territory)
     {
+        $current_month      =   explode('-', $current_month);
+        $year               =   2016;
+        $month              =   $current_month[0];
         $target             =   [];
         $productTarget      =   ProductTarget::select('id', 'quantity')
             ->where('product_id', $product)
             ->where('year', $year)
             ->first();
 
-        $areaTarget         =   AreaTarget::select('id', 'percent', 'months_target')
-            ->where('product_target_id', $productTarget['id'])
-            ->first();
+        if (isset($productTarget)) {
+            $areaTarget = AreaTarget::select('id', 'percent', 'months_target')
+                ->where('product_target_id', $productTarget['id'])
+                ->first();
 
-        $areaUnits          =   $areaTarget['percent'] * $productTarget['quantity'];
+            $areaUnits = $areaTarget['percent'] * $productTarget['quantity'];
 
-        $territoryTarget    =   TerritoryTarget::select('id', 'percent', 'months_target')
-            ->where('area_target_id', $areaTarget['id'])
-            ->where('territory_id', $territory)
-            ->first();
+            if(isset($areaTarget)) {
+                $territoryTarget = TerritoryTarget::select('id', 'percent', 'months_target')
+                    ->where('area_target_id', $areaTarget['id'])
+                    ->where('territory_id', $territory)
+                    ->first();
+            }
 
-        $territoryUnits     =   $areaUnits * $territoryTarget['percent'];
-        if ($territoryTarget) {
-            $target ['Jan'] = $territoryUnits * json_decode($territoryTarget['months_target']->jan);
-            $target ['Feb'] = $territoryUnits * json_decode($territoryTarget['months_target']->feb);
-            $target ['Mar'] = $territoryUnits * json_decode($territoryTarget['months_target']->mar);
-            $target ['Apr'] = $territoryUnits * json_decode($territoryTarget['months_target']->apr);
-            $target ['May'] = $territoryUnits * json_decode($territoryTarget['months_target']->may);
-            $target ['Jun'] = $territoryUnits * json_decode($territoryTarget['months_target']->jun);
-            $target ['Jul'] = $territoryUnits * json_decode($territoryTarget['months_target']->jul);
-            $target ['Aug'] = $territoryUnits * json_decode($territoryTarget['months_target']->aug);
-            $target ['Sep'] = $territoryUnits * json_decode($territoryTarget['months_target']->sep);
-            $target ['Oct'] = $territoryUnits * json_decode($territoryTarget['months_target']->oct);
-            $target ['Nov'] = $territoryUnits * json_decode($territoryTarget['months_target']->nov);
-            $target ['Dec'] = $territoryUnits * json_decode($territoryTarget['months_target']->dec);
+            $territoryUnits     =   $areaUnits * $territoryTarget['percent'];
+            if ($territoryTarget) {
+                $target ['Jan'] = $territoryUnits * json_decode($territoryTarget['months_target']->jan);
+                $target ['Feb'] = $territoryUnits * json_decode($territoryTarget['months_target']->feb);
+                $target ['Mar'] = $territoryUnits * json_decode($territoryTarget['months_target']->mar);
+                $target ['Apr'] = $territoryUnits * json_decode($territoryTarget['months_target']->apr);
+                $target ['May'] = $territoryUnits * json_decode($territoryTarget['months_target']->may);
+                $target ['Jun'] = $territoryUnits * json_decode($territoryTarget['months_target']->jun);
+                $target ['Jul'] = $territoryUnits * json_decode($territoryTarget['months_target']->jul);
+                $target ['Aug'] = $territoryUnits * json_decode($territoryTarget['months_target']->aug);
+                $target ['Sep'] = $territoryUnits * json_decode($territoryTarget['months_target']->sep);
+                $target ['Oct'] = $territoryUnits * json_decode($territoryTarget['months_target']->oct);
+                $target ['Nov'] = $territoryUnits * json_decode($territoryTarget['months_target']->nov);
+                $target ['Dec'] = $territoryUnits * json_decode($territoryTarget['months_target']->dec);
+            }
+            return $target[$month];
         }
-        return $target;
+
     }
 
     public static function generalManager()
@@ -266,7 +284,6 @@ class Employee extends Model implements AuthenticatableContract,
 
     public static function yourAreaManager($mrId)
     {
-        //mr_session
         $areaManager = Employee::where('id', $mrId)->where('level_id', 7)->first()->manager_id;
         return Employee::findOrFail($areaManager);
     }
@@ -290,14 +307,25 @@ class Employee extends Model implements AuthenticatableContract,
 
     public static function isYourMRAsAM($MRId)
     {
-        $yourId =   '4'; // am_session
+        $yourId     =   \Auth::user()->id;
         return $yourId ==Employee::findOrFail($MRId)->manager_id;
     }
 
     public static function isYourMRAsSM($MRId)
     {
-        $yourId =   '1'; // sm_session
+        $yourId =   \Auth::user()->id;
         $AMId   =   Employee::findOrFail($MRId)->manager_id;
         return $yourId ==  Employee::findOrFail($AMId)->manager_id;
+    }
+
+    public static function areYou($MRId)
+    {
+        $yourId         =   \Auth::user()->id;
+        return $yourId ==   Employee::findOrFail($MRId)->id;
+    }
+
+    public function setHiringDateAttribute($date)
+    {
+        $this->attributes['hiring_date'] = \Carbon\Carbon::parse($date)->format('Y-m-d');
     }
 }

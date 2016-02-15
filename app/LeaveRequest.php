@@ -54,4 +54,9 @@ class LeaveRequest extends Model
     {
         return $query->where('approved', NULL);
     }
+
+    public function getDateAttribute($date)
+    {
+        return \Carbon\Carbon::parse($date)->format('d-m-Y');
+    }
 }

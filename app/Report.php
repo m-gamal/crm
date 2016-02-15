@@ -53,8 +53,8 @@ class Report extends Model
     /**
      * Format Promoted Products before displaying
      */
-    public function getPromotedProductsAttribute($products)
-    {
+//    public function getPromotedProductsAttribute($products)
+//    {
 //        $allProducts = [];
 //        if (!empty($products)){
 //            $promotedProducts = json_decode($products);
@@ -64,7 +64,7 @@ class Report extends Model
 //            }
 //            return implode(' ', $allProducts);
 //        }
-    }
+//    }
 
 
 //    /**
@@ -131,16 +131,15 @@ class Report extends Model
         return $isPlanned;
     }
 
+
     public static function planned()
     {
-        // mr_session
-        return Report::where('mr_id', 3)->where('month', date('M-Y'))->where('is_planned', 1)->get();
+        return Report::where('mr_id', \Auth::user()->id)->where('month', date('M-Y'))->where('is_planned', 1)->get();
     }
 
     public static function notPlanned()
     {
-        // mr_session
-        return Report::where('mr_id', 3)->where('month', date('M-Y'))->where('is_planned', 0)->get();
+        return Report::where('mr_id', \Auth::user()->id)->where('month', date('M-Y'))->where('is_planned', 0)->get();
     }
 
     public function promotedProducts()
@@ -162,4 +161,11 @@ class Report extends Model
     {
         return $this->hasMany('App\ReportSoldProduct', 'report_id');
     }
+
+    public function getDateAttribute($date)
+    {
+        return \Carbon\Carbon::parse($date)->format('d-m-Y');
+    }
+
+
 }

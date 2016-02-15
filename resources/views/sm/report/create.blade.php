@@ -1,4 +1,4 @@
-@extends('am.layouts.master')
+@extends('sm.layouts.master')
 @section('title')
     Add New Report
 @endsection
@@ -23,7 +23,7 @@
 
                 {!!
                 Form::open([
-                'route' 	=> 	'amDoAddReport',
+                'route' 	=> 	'smDoAddReport',
                 'role' 		=> 	'form',
                 'method' 	=> 	'post',
                 'class'		=>	'form-horizontal form-bordered',

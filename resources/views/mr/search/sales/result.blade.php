@@ -12,6 +12,15 @@
     <!-- Datatables Content -->
     <div class="block full">
         <div class="block-title">
+            <div class="block-options pull-right">
+                <a href="{{URL::route('mrExportSalesSearch', 'xlsx')}}">
+                    <img src="{{URL::asset('img/excel.png')}}" alt="">
+                </a>
+                |
+                <a href="{{URL::route('mrExportSalesSearch', 'pdf')}}">
+                    <img src="{{URL::asset('img/pdf.png')}}" alt="">
+                </a>
+            </div>
             <h2>
                 <strong>Sales</strong> Search Result
             </h2>
@@ -38,7 +47,6 @@
                     @foreach($searchResult as $product =>$sold_quantity)
                     <tr>
                         <td class="text-center">{{$product}}</td>
-                        <td class="text-center">{{$sold_quantity}}</td>
                         <td class="text-center">{{$sold_quantity}}</td>
                     </tr>
                     @endforeach

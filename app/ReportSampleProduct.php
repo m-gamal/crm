@@ -35,4 +35,9 @@ class ReportSampleProduct extends Model
     {
         return $this->belongsTo('App\Product');
     }
+
+    public function getDateAttribute($date)
+    {
+        return \Carbon\Carbon::parse($date)->format('d-m-Y');
+    }
 }

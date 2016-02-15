@@ -4,10 +4,9 @@ namespace App\Http\Controllers\AM;
 
 use App\Customer;
 use App\Employee;
-use Illuminate\Http\Request;
 use App\Product;
-use App\Plan;
-use App\Report;
+use App\AMPlan;
+use App\AMReport;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -15,11 +14,19 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return view('am.index');
-    }
+        $employees  =   Employee::select('line_id')->where('manager_id', \Auth::user()->id)->get();
+        $products   =   Product::whereIn('line_id', $employees)->get();
 
-    public function lock()
-    {
-        return view('am.partials.lock');
+        $employees  =   Employee::select('id')->where('manager_id', \Auth::user()->id)->get();
+        $customers  =   Customer::whereIn('mr_id', $employees)->get();
+        $employees  =   Employee::where('manager_id', \Auth::user()->id)->get();
+        $dataView = [
+            'productsCount'     =>  count($products),
+            'plansCount'        =>  AMPlan::where('month', \Config::get('app.current_month'))->count(),
+            'reportsCount'      =>  AMReport::where('month', \Config::get('app.current_month'))->count(),
+            'customersCount'    =>  count($customers),
+            'employeesCount'    =>  count($employees)
+        ];
+        return view('am.index', $dataView);
     }
 }

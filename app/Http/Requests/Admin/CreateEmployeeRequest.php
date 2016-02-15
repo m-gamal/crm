@@ -29,8 +29,8 @@ class CreateEmployeeRequest extends Request
             'email'         =>  'required|email',
             'password'      =>  'required',
             'level'         =>  'required',
-            'hiring_date'   =>  'required|date_format:Y-m-d',
-            'leaving_date'  =>  'date_format:Y-m-d',
+            'hiring_date'   =>  'required|date_format:d-m-Y',
+            'leaving_date'  =>  'date_format:d-m-Y',
             'photo'         =>  'required|image'
         ];
     }

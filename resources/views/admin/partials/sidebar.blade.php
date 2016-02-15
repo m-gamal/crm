@@ -7,16 +7,18 @@
             <div class="sidebar-section sidebar-user clearfix sidebar-nav-mini-hide">
                 <div class="sidebar-user-avatar">
                     <a href="#">
-                        <img src="{{URL::asset('img/placeholders/avatars/avatar2.jpg')}}" alt="avatar">
+                        @if(\Auth::user()->id)
+                            <img src="{{URL::asset('img/avatar/'.\Auth::user()->id)}}" alt="avatar">
+                        @else
+                            <img src="{{URL::asset('img/placeholders/avatars/avatar2.jpg')}}" alt="avatar">
+                        @endif
                     </a>
                 </div>
-                <div class="sidebar-user-name">
-                    Admin
-                </div>
+                <div class="sidebar-user-name">{{\Auth::user()->name}}</div>
                 <div class="sidebar-user-links">
+                    <a href="{{URL::route('adminProfile')}}" data-toggle="tooltip" data-placement="bottom" title="Edit Profile"><i class="fa fa-user"></i></a>
                     <a href="{{URL::route('adminInbox')}}" data-toggle="tooltip" data-placement="bottom" title="Messages"><i class="gi gi-envelope"></i></a>
-                    <!-- Opens the user settings modal that can be found at the bottom of each page (page_footer.html in PHP version) -->
-                    <a href="{{URL::route('adminLogout')}}" data-toggle="tooltip" data-placement="bottom" title="Logout"><i class="gi gi-exit"></i></a>
+                    <a href="{{URL::route('logout')}}" data-toggle="tooltip" data-placement="bottom" title="Logout"><i class="gi gi-exit"></i></a>
                 </div>
             </div>
             <!-- END User Info -->
