@@ -3,6 +3,7 @@
 use App\Employee;
 use App\Report;
 use App\Customer;
+use App\Announcement;
 
 /*
 |--------------------------------------------------------------------------
@@ -87,6 +88,7 @@ function()
 	Route::get('upload-doctors-list/{mr_id}', ['as'    =>  'uploadDoctorsList', 'uses'  =>  'Admin\CustomerController@upload']);
 	Route::post('upload-doctors-list/{mr_id}', ['as'    =>  'doUploadDoctorsList', 'uses'  =>  'Admin\CustomerController@doUpload']);
 	Route::get('export-customer-search/{type}', ['as'    =>  'adminExportCustomerSearch', 'uses'  =>  'Admin\ExportController@customerSearch']);
+	Route::get('export-customers', ['as'    =>  'adminExportCustomers', 'uses'  =>  'Admin\ExportController@customers']);
 
 	// Line
 	Route::get('add-line', ['as'    =>  'addLine', 'uses'  =>  'Admin\LineController@create']);
@@ -300,7 +302,7 @@ function(){
 	Route::get('search-customer', ['as'    =>  'smSearchCustomer', 'uses'  =>  'SM\CustomerController@search']);
 	Route::post('search-customer', ['as'    =>  'smDoSearchCustomer', 'uses'  =>  'SM\CustomerController@doSearch']);
 	Route::get('single-customer/{id}', ['as'    =>  'smSingleDoctor', 'uses'  =>  'SM\CustomerController@single']);
-	Route::get('export-customer-search/{type}', ['as'    =>  'smExportCustomerSearch', 'uses'  =>  'SM\Export*Controller@customerSearch']);
+	Route::get('export-customer-search/{type}', ['as'    =>  'smExportCustomerSearch', 'uses'  =>  'SM\ExportController@customerSearch']);
 
 	// Products
 	Route::get('products', ['as'    =>  'smProducts', 'uses'  =>  'SM\ProductController@listAll']);
@@ -497,8 +499,14 @@ function()
 	Route::get('dashboard',  ['as' => 'mr', function () {
 		$coverageStats              =   Employee::coverageStats(\Auth::user()->id, date('M-Y'));
 		$totalProducts              =   Employee::monthlyDirectSales(\Auth::user()->id, date('M-Y'));
-		$monthlyReports				=	Report::where('mr_id', \Auth::user()->id)->where('month', date('M-Y'))->get();
+		$reports 					=	Report::where('mr_id', \Auth::user()->id)->where('month', date('M-Y'));
+		$monthlyReports				=	$reports->get();
+		$monthlyFollowsUp			=	$reports->whereNotNull('follow_up')->get();
 		$doctors                    =   Customer::where('mr_id', \Auth::user()->id)->get();
+		$announcements				=	Announcement::where('level_id', 7)
+													->where('start', '>=', date('Y-m-d'))
+													->where('end', '<=', date('Y-m-d', strtotime('+1 week')))
+													->get();
 
 		$dataView =	[
 			'doctors'                       =>  count($doctors),
@@ -506,7 +514,9 @@ function()
 			'actualVisitsCount'             =>  $coverageStats['actualVisitsCount'],
 			'totalMonthlyCoverage'          =>  $coverageStats['totalMonthlyCoverage'],
 			'totalSoldProductsSalesPrice' 	=>  $totalProducts['totalSoldProductsSalesPrice'],
-			'monthlyReports'				=>	$monthlyReports
+			'monthlyReports'				=>	$monthlyReports,
+			'monthlyFollowsUp'				=>	$monthlyFollowsUp,
+			'announcements'					=>	$announcements
 		];
 		return view('mr.index', $dataView);
     }]);
@@ -564,6 +574,7 @@ function()
 	Route::get('line-history', ['as'    =>  'lineHistory', 'uses'  =>  'MR\LineController@history']);
 	Route::post('line-history', ['as'    =>  'doLineHistory', 'uses'  =>  'MR\LineController@doHistory']);
 	Route::get('ajax-coverage-by-specialty', ['as'    =>  'ajaxCoverageBySpecialty', 'uses'  =>  'MR\LineController@ajaxCoverageBySpecialty']);
+	Route::get('export-customers', ['as'    =>  'mrExportCustomers', 'uses'  =>  'MR\ExportController@customers']);
 
 	// Sales Search
 	Route::get('sales-search', ['as'    =>  'salesSearch', 'uses'  =>  'MR\SaleController@search']);

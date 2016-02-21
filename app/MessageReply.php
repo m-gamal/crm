@@ -32,4 +32,9 @@ class MessageReply extends Model
     {
         return \Carbon\Carbon::parse($date)->format('d-m-Y');
     }
+
+    public function scopeLatest($query)
+    {
+        return $query->OrderBy('created_at', 'DESC');
+    }
 }

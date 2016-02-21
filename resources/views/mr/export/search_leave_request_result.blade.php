@@ -1,3 +1,7 @@
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />    
+</head>
+
 <div class="table-responsive">
     <table id="leave-request-search-result" class="table table-vcenter table-condensed table-bordered">
         <thead>

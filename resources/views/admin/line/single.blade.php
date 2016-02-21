@@ -80,8 +80,7 @@
             <div class="block">
                 <div class="alert alert-info">
                     <i class="fa fa-download"></i>
-                    <a href="{{URL::asset('uploads/doctors_list/'.Request::segment(3).'/doctors_list.xlsx')}}"
-                       download="{{'doctors_list.xlsx'}}" target="_blank"> Download Doctors List </a>
+                    <a href="{{URL::route('adminExportCustomers')}}"> Download Doctors List </a>
                 </div>
             </div>
         </div>

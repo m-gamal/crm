@@ -42,4 +42,5 @@
 
     <!-- Modernizr (browser feature detection library) & Respond.js (enables responsive CSS code on browsers that don't support it, eg IE8) -->
     <script src="{{URL::asset('js/vendor/modernizr-respond.min.js')}}"></script>
+    @yield('custom_styles')
 </head>

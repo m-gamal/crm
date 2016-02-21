@@ -1,3 +1,7 @@
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />    
+</head>
+
 <h2>
     from {{$date_from}}
 </h2>
@@ -22,10 +26,10 @@
             @foreach($searchResult as $singleReport)
                 <tr>
                     <td class="text-center">{{$singleReport->date}}</td>
-                    <td class="text-center">{{$singleReport->doctor->name}}</td>
-                    <td class="text-center">{{$singleReport->follow_up}}</td>
-                    <td class="text-center">{{$singleReport->feedback}}</td>
-                    <td class="text-center">{{!empty($singleReport->double_visit_manager_id) ? $singleReport->double_visit_manager_id : 'N/A'}}</td>
+                    <td class="text-center" style="font-family: DejaVu Sans, sans-serif;">{{$singleReport->doctor->name}}</td>
+                    <td class="text-center" style="font-family: DejaVu Sans, sans-serif;">{{$singleReport->follow_up}}</td>
+                    <td class="text-center" style="font-family: DejaVu Sans, sans-serif;">{{$singleReport->feedback}}</td>
+                    <td class="text-center" style="font-family: DejaVu Sans, sans-serif;">{{!empty($singleReport->double_visit_manager_id) ? $singleReport->double_visit_manager_id : 'N/A'}}</td>
                     <td class="text-center">{{$singleReport->total_sold_products_price}}</td>
                 </tr>
             @endforeach

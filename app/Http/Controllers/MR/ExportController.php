@@ -132,4 +132,19 @@ class ExportController extends Controller
                 });
             })->export($type);
     }
+
+    public function customers()
+    {
+        $customers                  =   \Session::get('customers');
+
+        \Excel::create('doctors-list',
+            function($excel)use($customers)  {
+                $excel->sheet('customers', function($sheet) use($customers) {
+                    $sheet->setAllBorders('thin');
+                    $sheet->loadView('mr.export.customers')
+                        ->with('customers', $customers);
+                });
+            })->export('xlsx');
+        \Session::forget('customers');
+    }
 }

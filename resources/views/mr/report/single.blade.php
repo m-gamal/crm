@@ -53,9 +53,12 @@ Single Report
                 <div class="form-group">
                     <label class="col-md-3 control-label">Doctor</label>
                     <div class="col-md-9">
-                        <p class="form-control-static">{{$singleReport->doctor->name}}</p>
+                        <p class="form-control-static">
+                            <a href="{{URL::route('singleDoctor', $singleReport->doctor->id)}}">{{$singleReport->doctor->name}}</a>
+                        </p>
                     </div>
                 </div>
+
 
                 <div class="form-group">
                     <label class="col-md-3 control-label">Promoted Products</label>
@@ -135,7 +138,7 @@ Single Report
                     <label class="col-md-3 control-label">Double Visit with</label>
                     <div class="col-md-9">
                         <p class="form-control-static">
-                            {!! $singleReport->double_visit_manger_id != 'NULL' ? \App\Employee::findOrFail($singleReport->double_visit_manager_id)->name : "<i>N/A</i>" !!}
+                            {!! !is_null($singleReport->double_visit_manager_id) ? \App\Employee::findOrFail($singleReport->double_visit_manager_id)->name : "<i>N/A</i>" !!}
                         </p>
                     </div>
                 </div>

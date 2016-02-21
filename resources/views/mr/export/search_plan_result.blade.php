@@ -1,3 +1,7 @@
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />    
+</head>
+
 <div class="table-responsive">
     <table id="plan-search-result" class="table table-vcenter table-condensed table-bordered">
         <thead>
@@ -16,12 +20,12 @@
                     <td >{{$singlePlan->date}}</td>
                     <td >
                         @foreach((array)json_decode($singlePlan->doctors) as $singleDoctor)
-                            <label class="label label-success">
-                                {{\App\Customer::findOrFail($singleDoctor)->name}}
+                            <label style="font-family: DejaVu Sans, sans-serif;" class="label label-success">                        
+                                {{\App\Customer::findOrFail($singleDoctor)->name .'|'}}
                             </label>
                         @endforeach
                     </td>
-                    <td >{{$singlePlan->comment}}</td>
+                    <td style="font-family: DejaVu Sans, sans-serif;">{{$singlePlan->comment}}</td>
                 </tr>
             @endforeach
         @endif

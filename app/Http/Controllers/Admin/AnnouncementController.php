@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Announcement;
 use App\Level;
+use App\Http\Requests\Admin\AnnouncementRequest;
 
 class AnnouncementController extends Controller
 {
@@ -37,6 +38,7 @@ class AnnouncementController extends Controller
         $announcement->month    =   \Config::get('app.current_month');
         $announcement->text     =   $request->text;
         $announcement->start    =   $request->start;
+        $announcement->end      =   date('Y-m-d', strtotime('+1 week', strtotime($request->start)));
 
         try {
             $announcement->save();
@@ -66,6 +68,8 @@ class AnnouncementController extends Controller
         $announcement->month    =   \Config::get('app.current_month');
         $announcement->text     =   $request->text;
         $announcement->start    =   $request->start;
+        $announcement->end      =   date('Y-m-d', strtotime('+1 week', strtotime($request->start)));
+
         try {
             $announcement->save();
             return redirect()->route('announcements')->with('message','Announcement has been updated successfully !');

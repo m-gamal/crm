@@ -53,7 +53,14 @@ Inbox
 
             <!-- Messages List Content -->
             <div class="table-responsive">
-                <table class="table table-hover table-vcenter">
+                <table class="example-datatable table table-vcenter table-condensed table-bordered">
+                    <thead>
+                    <tr>
+                        <th class="text-center">Receiver</th>
+                        <th class="text-center">Subject</th>
+                        <th class="text-center">Time</th>
+                    </tr>
+                    </thead>
                     <tbody>
                     <!-- Use the first row as a prototype for your column widths -->
                     @foreach($sentMessages as $singleMessage)
@@ -79,6 +86,6 @@ Inbox
 @endsection
 
 @section('custom_footer_scripts')
-<script src="js/pages/readyInbox.js"></script>
-<script>$(function(){ ReadyInbox.init(); });</script>
+<script src="{{URL::asset('js/pages/tablesDatatables.js')}}"></script>
+<script>$(function(){ TablesDatatables.init(); });</script>
 @endsection

@@ -24,10 +24,10 @@ class CreateMessageRequest extends Request
     public function rules()
     {
         return [
-            'employee'      =>  'required',
+            'employees'     =>  'required',
             'subject'       =>  'required',
             'message'       =>  'required',
-            'attachment'    =>  ''
+            'attachment'    =>  'mimes:zip'
         ];
     }
 }

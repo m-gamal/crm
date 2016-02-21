@@ -49,10 +49,10 @@ All Leave Requests
                     <td class="text-center">{{$singleLeaveRequest->month}}</td>
                     <td class="text-center">{{$singleLeaveRequest->date}}</td>
                     <td class="text-center">{{$singleLeaveRequest->reason}}</td>
-                    <td class="text-center">{{$singleLeaveRequest->leave_start}}</td>
-                    <td class="text-center">{{$singleLeaveRequest->leave_end}}</td>
+                    <td class="text-center">{{date('d-m-Y', strtotime($singleLeaveRequest->leave_start))}}</td>
+                    <td class="text-center">{{date('d-m-Y', strtotime($singleLeaveRequest->leave_end))}}</td>
                     <td class="text-center">
-                        <a href="{{URL::asset('uploads/leave_requests/'.$singleLeaveRequest->emp_id.'/'.$singleLeaveRequest->month.'/'.$singleLeaveRequest->date.'.zip')}}"
+                        <a href="{{URL::asset('uploads/leave_requests/'.$singleLeaveRequest->mr_id.'/'.$singleLeaveRequest->month.'/'.$singleLeaveRequest->date.'.zip')}}"
                         download="{{$singleLeaveRequest->date.'.zip'}}" target="_blank">
                             <i class="fa fa-download"></i>
                         </a>

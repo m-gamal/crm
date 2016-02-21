@@ -80,8 +80,7 @@
             <div class="block">
                 <div class="alert alert-info">
                     <i class="fa fa-download"></i>
-                    <a href="{{URL::asset('uploads/doctors_list/'. \Auth::user()->id .'/doctors_list.xlsx')}}"
-                       download="{{'doctors_list.xlsx'}}" target="_blank"> Download Doctors List </a>
+                    <a href="{{URL::route('mrExportCustomers')}}" target="_blank"> Download Doctors List </a>
                 </div>
             </div>
         </div>
@@ -174,7 +173,7 @@
                                     <thead>
                                     <tr>
                                         <th class="text-center">Name</th>
-                                        <th class="text-center">Job</th>
+                                        <th class="text-center">Level</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -234,7 +233,7 @@
                                     <div class="tab-pane active" id="class">
                                         <div class="block full">
                                             <div class="block-title">
-                                                <h2><strong>Total Monthly</strong> Coverage</h2>
+                                                <h2><strong>Total Monthly Coverage</strong> By Class</h2>
                                             </div>
                                             <div class="form-group">
                                                 <div class="alert alert-info alert-dismissable text-center">
@@ -250,19 +249,17 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="speciality">
+                                    <div class="tab-pane" id="speciality">
                                         <!-- Pie Chart Block -->
                                         <div class="block full">
                                             <!-- Pie Chart Title -->
                                             <div class="block-title">
-                                                <h2><strong>Pie</strong> Chart</h2>
+                                                <h2><strong>Total Monthly Coverage</strong> By Speciality</h2>
                                             </div>
                                             <!-- END Pie Title -->
 
                                             <!-- Pie Chart Content -->
-                                            <div id="chart-pie" class="chart">
-
-                                            </div>
+                                            <div id="chart-pie" class="chart"></div>
                                             <!-- END Pie Chart Content -->
                                         </div>
                                         <!-- END Pie Chart Block -->

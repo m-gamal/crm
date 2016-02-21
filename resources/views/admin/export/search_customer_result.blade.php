@@ -1,3 +1,7 @@
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+</head>
+
 <table class="example-datatable table table-vcenter table-condensed table-bordered">
     <thead>
     <tr>
@@ -14,17 +18,16 @@
     @if(count($customers) > 0)
         @foreach($customers as $singleCustomer)
             <tr>
-                <td class="text-center">
+                <td class="text-center" style="font-family: DejaVu Sans, sans-serif;">
                     {{$singleCustomer->name}}
                 </td>
                 <td class="text-center">{{$singleCustomer->class}}</td>
                 <td class="text-center">{{$singleCustomer->specialty}}</td>
                 <td class="text-center">{{$singleCustomer->email}}</td>
                 <td class="text-center">{{$singleCustomer->clinic_tel}}</td>
-                <td class="text-center">{{$singleCustomer->mr->name}}</td>
+                <td class="text-center" style="font-family: DejaVu Sans, sans-serif;">{{$singleCustomer->mr->name}}</td>
                 <td class="text-center"><p class="label {{$singleCustomer->active == "Active" ? 'label-success' : 'label-danger'}}">{{$singleCustomer->active}}</p></td>
             </tr>
-            </div>
         @endforeach
     @endif
     </tbody>

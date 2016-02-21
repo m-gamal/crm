@@ -43,7 +43,7 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label">Date From</label>
                     <div class="col-md-10">
-                        <input type="text" name="date_from" class="form-control input-datepicker" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd"
+                        <input type="text" name="date_from" class="form-control input-datepicker" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy"
                         value="{{old('date_from')}}">
                         @if($errors->has('date_from'))
                             <div class="alert alert-danger">
@@ -57,7 +57,7 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label">Date To</label>
                     <div class="col-md-10">
-                        <input type="text" name="date_to" class="form-control input-datepicker" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd"
+                        <input type="text" name="date_to" class="form-control input-datepicker" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy"
                         value="{{old('date_to')}}">
                         @if($errors->has('date_to'))
                             <div class="alert alert-danger">

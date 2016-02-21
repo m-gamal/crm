@@ -66,6 +66,12 @@ class Text_Renderer extends Abstract_Renderer {
       $text
     );*/
     
+    if ( ! class_exists( 'I18N_Arabic' ) ){
+      require_once( DOMPDF_DIR . "/I18N/Arabic/Glyphs.php" );
+      $Arabic = new I18N_Arabic_Glyphs('Glyphs');
+      $text = $Arabic->utf8Glyphs($text);
+    }
+
     $this->_canvas->text($x, $y, $text,
                          $font, $size,
                          $style->color, $word_spacing, $char_spacing);

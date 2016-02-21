@@ -135,7 +135,6 @@ class ReportController extends Controller
                     }
                 }
 
-
                 if (!empty($request->sold_product))
                 {
                     $soldProduct                =   new ReportSoldProduct();
@@ -155,8 +154,11 @@ class ReportController extends Controller
                     }
                 }
             }
-
+            if (\Session::get('planned_visit') == 1){
+                return redirect()->route('plans')->with('message','Report has been created successfully !');
+            }
             return redirect()->back()->with('message','Report has been created successfully !');
+
         } catch (ParseException $ex) {
             echo 'Failed to create new report , with error message: ' . $ex->getMessage();
         }
@@ -396,9 +398,14 @@ class ReportController extends Controller
     public function search()
     {
         $doctors    =   Customer::where('mr_id', \Auth::user()->id)->get();
+        $MRLine     =   Employee::findOrFail(\Auth::user()->id)->line_id;
+        $products   =   Product::where('line_id', $MRLine)->get();
+        $gifts      =   Gift::all();
 
         $dataView   =   [
-            'doctors'  =>  $doctors
+            'doctors'  =>  $doctors,
+            'products'  =>  $products,
+            'gifts'     =>  $gifts
         ];
 
         return view('mr.search.reports.search', $dataView);
@@ -406,21 +413,65 @@ class ReportController extends Controller
 
     public function doSearch(ReportSearchRequest $request)
     {
-        $searchResult   =   [];
-        $from           =   $request->date_from;
-        $to             =   $request->date_to;
-        $doctors        =   $request->doctors;
+        $searchResult       =   null;
+        $from               =   date('Y-m-d', strtotime($request->date_from));
+        $to                 =   date('Y-m-d', strtotime($request->date_to));
+        $doctors            =   $request->doctors;
+        $promoted_product   =   $request->promoted_product;
+        $sample_product     =   $request->sample_product;
+        $sold_product       =   $request->sold_product;
+        $gift               =   $request->gift;
+        $follow_up          =   $request->follow_up;
+        $feedback           =   $request->feedback;
 
-
-        $allSearchedReport = Report::where('date', '>=', $from)
+        $allReportsInRange = Report::where('date', '>=', $from)
             ->where('date', '<=', $to)
-            ->whereIn('doctor_id', $doctors)
-            ->get();
+            ->where('mr_id', \Auth::user()->id);
 
-        foreach($allSearchedReport as $singleReport)
+        if (!empty($doctors))
         {
-            $searchResult [] = $singleReport;
+            $allReportsInRange->whereIn('doctor_id', $doctors);
         }
+
+        if (!empty($promoted_product))
+        {
+            $allReportsInRange->join('report_promoted_product', 'report_promoted_product.report_id', '=', 'report.id')
+                ->where('report_promoted_product.product_id', $promoted_product);
+        }
+
+        if (!empty($sample_product))
+        {
+            $allReportsInRange->join('report_sample_product', 'report_sample_product.report_id', '=', 'report.id')
+                ->where('report_sample_product.product_id', $sample_product);
+        }
+
+        if (!empty($sold_product))
+        {
+            $allReportsInRange->join('report_sold_product', 'report_sold_product.report_id', '=', 'report.id')
+                ->where('report_sold_product.product_id', $sold_product);
+        }
+
+        if (!empty($gift))
+        {
+            $allReportsInRange->join('report_gift', 'report_gift.report_id', '=', 'report.id')
+                ->where('report_gift.gift_id', $gift);
+        }
+
+        if ($follow_up == 1)
+        {
+            $allReportsInRange->whereNotNull('report.follow_up');
+        } else {
+            $allReportsInRange->whereNull('report.follow_up');
+        }
+
+        if ($feedback == 1)
+        {
+            $allReportsInRange->where('report.feedback', '<>', '');
+        } else {
+            $allReportsInRange->whereNull('report.feedback');
+        }
+
+        $searchResult = $allReportsInRange->get();
 
         $dataView   =   [
             'searchResult'  =>  $searchResult

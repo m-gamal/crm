@@ -29,10 +29,11 @@ class PlanController extends Controller
         $i = 0;
         foreach($plans as $singlePlan)
         {
-            $arr[$i]['title']   =   $singlePlan->comment;
             $arr[$i]['start']   =   $singlePlan['date'];
-            $arr[$i]['color']   =   'black';
+            $arr[$i]['title'] =   ($singlePlan->comment) ? $singlePlan->comment : '';
+            $arr[$i]['color']       =   'black';
             $i++;
+            
             foreach(json_decode($singlePlan['doctors']) as $singleDoctorId)
             {
                 $color  =   $this->isDoctorVisited($singleDoctorId, $singlePlan['date']) == true ? 'green' : 'red';
@@ -105,8 +106,8 @@ class PlanController extends Controller
     {
         $planSearchResult           =   [];
         $leaveRequestSearchResult   =   [];
-        $from                       =   $request->date_from;
-        $to                         =   $request->date_to;
+        $from                       =   date('Y-m-d', strtotime($request->date_from));
+        $to                         =   date('Y-m-d', strtotime($request->date_to));
 
         $allSearchedPlan = Plan::where('date', '>=', $from)
             ->where('date', '<=', $to)

@@ -26,7 +26,7 @@ class ReportSearchRequest extends Request
         return [
             'date_from' =>  'required',
             'date_to'   =>  'required',
-            'doctors'   =>  'required'
+            'doctors'   =>  ''
         ];
     }
 }

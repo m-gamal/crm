@@ -59,4 +59,21 @@ class LeaveRequest extends Model
     {
         return \Carbon\Carbon::parse($date)->format('d-m-Y');
     }
+
+    public function setDateAttribute($date)
+    {
+        $this->attributes['date'] = \Carbon\Carbon::parse($date)->format('Y-m-d');
+    }
+
+
+    public function setLeaveStartAttribute($date)
+    {
+        $this->attributes['leave_start'] = \Carbon\Carbon::parse($date)->format('Y-m-d');
+    }
+
+
+    public function setLeaveEndAttribute($date)
+    {
+        $this->attributes['leave_end'] = \Carbon\Carbon::parse($date)->format('Y-m-d');
+    }
 }

@@ -46,7 +46,7 @@
                 <li id="employee">
                     <a href="{{URL::route('employees')}}">
                         <i class="fa fa-users sidebar-nav-icon"></i>
-                        <span class="sidebar-nav-mini-hide">Employers</span>
+                        <span class="sidebar-nav-mini-hide">Employees</span>
                     </a>
                 </li>
                 <li id="customer">

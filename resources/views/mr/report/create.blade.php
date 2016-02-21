@@ -57,7 +57,7 @@
                         <label class="col-md-2 control-label">Date</label>
                         <div class="col-md-10">
                             <input type="text" id="date" name="date" class="form-control input-datepicker"
-                                   data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd" readonly>
+                                   data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" readonly>
                         </div>
                         @if($errors->has('date'))
                             <div class="alert alert-danger">

@@ -11,6 +11,7 @@ use App\MessageReply;
 
 class InboxController extends Controller
 {
+    public $originalDir;
     public function all()
     {
         $messages   =   Message::where('receiver', \Auth::user()->id)->get();
@@ -32,39 +33,62 @@ class InboxController extends Controller
 
     public function doCreate(CreateMessageRequest $request)
     {
-        $message = new Message;
+        $uploaded = false;
 
-        $message->sender    =   \Auth::user()->id;
-        $message->receiver  =   $request->employee;
-        $message->subject   =   $request->subject;
-        $message->time      =   \Carbon\Carbon::now()->toTimeString();
-        try {
-            if ($message->save()){
+        foreach ($request->employees as $key=>$singleEmployee) {
+            $user = Employee::findOrFail($singleEmployee);
+
+            $message = new Message;
+            $message->sender    =   \Auth::user()->id;
+            $message->receiver  =   $singleEmployee;
+            $message->subject   =   $request->subject;
+            $message->time      =   \Carbon\Carbon::now()->toTimeString();
+
+            if ($message->save()) {
                 $messageReply = new MessageReply();
 
                 $messageReply->sender   =   \Auth::user()->id;
                 $messageReply->msg_id   =   $message->id;
                 $messageReply->text     =   $request->message;
                 $messageReply->time     =   \Carbon\Carbon::now()->toTimeString();
+
+                \File::makeDirectory(public_path('uploads/inbox/').$message->id);
+
                 if ($messageReply->save()) {
                     if ($request->file('attachment')) {
+                        $file = $request->file('attachment');
                         $messageReply->is_attachment = 1;
                         $messageReply->save();
-                        $extension = $request->file('attachment')->getClientOriginalExtension();
-                        $request->file('attachment')->move(public_path('uploads/inbox/' . $message->id . '/'), $messageReply->id.'.'.$extension);
+                        $extension = $file ->getClientOriginalExtension();
+                        if ($file->isValid()) {
+                            if ($uploaded)
+                            {
+                                copy($uploaded, public_path('uploads/inbox/' . $this->originalDir));
+                            }
+                            else
+                            {
+                                if ($file->move(public_path('uploads/inbox/' . $message->id), $messageReply->id . '.' . $extension))
+                                {
+                                    $uploaded = public_path('uploads/inbox/' . $message->id) .'/'. $messageReply->id . '.' . $extension;
+                                    $this->originalDir = $message->id;
+                                }
+                            }
+                        }
                     }
                 }
-            }
 
-            return redirect()->back()->with('message','Message has been sent successfully !');
-        } catch (ParseException $ex) {
-            echo 'Failed to send message , with error message: ' . $ex->getMessage();
+                \Mail::send('admin.emails.new_message', ['user' => $user], function ($m) use ($user) {
+                    $m->from('info@cloudscrm.info', 'CloudsCRM');
+                    $m->to($user->email, $user->name)->subject('New Message!');
+                });
+            }
         }
+      return redirect()->back()->with('message', 'Message has been sent successfully !');
     }
 
     public function sent()
     {
-        $sentMessages   =   Message::where('sender', \Auth::user()->id)->get();
+        $sentMessages   =   Message::where('sender', \Auth::user()->id)->latest()->get();
         $dataView       =   [
             'sentMessages'  =>  $sentMessages
         ];

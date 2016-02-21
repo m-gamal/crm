@@ -1,3 +1,7 @@
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />    
+</head>
+
 <h2>
     from {{$date_from}} to {{$date_to}}
 </h2>
@@ -13,7 +17,7 @@
         <tbody>
         @foreach($productSales as $product =>$sold_quantity)
             <tr>
-                <td class="text-center">{{$product}}</td>
+                <td class="text-center" style="font-family: DejaVu Sans, sans-serif;">{{$product}}</td>
                 <td class="text-center">{{$sold_quantity}}</td>
             </tr>
         @endforeach

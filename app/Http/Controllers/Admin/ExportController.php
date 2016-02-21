@@ -28,11 +28,11 @@ class ExportController extends Controller
 
         \Excel::create('report-'.$level.'-'.$singleReport->emp->name.'-'.$singleReport->date,
             function($excel)use($singleReport)  {
-            $excel->sheet('report', function($sheet) use($singleReport){
-                $sheet->setAllBorders('thin');
-                $sheet->loadView('admin.export.single_report')->with('singleReport', $singleReport);
-            });
-        })->export($type);
+                $excel->sheet('report', function($sheet) use($singleReport){
+                    $sheet->setAllBorders('thin');
+                    $sheet->loadView('admin.export.single_report')->with('singleReport', $singleReport);
+                });
+            })->export($type);
     }
 
     public function planSearch($type)
@@ -142,12 +142,28 @@ class ExportController extends Controller
         $customers                  =   \Session::get('customers');
 
         \Excel::create('customer-search',
+        function($excel)use($customers)  {
+            $excel->sheet('customers', function($sheet) use($customers) {
+                $sheet->setAllBorders('thin');
+                $sheet->loadView('admin.export.search_customer_result')
+                    ->with('customers', $customers);
+            });
+        })->export($type);
+        \Session::forget('customers');
+    }
+
+    public function customers()
+    {
+        $customers                  =   \Session::get('customers');
+
+        \Excel::create('doctors-list',
             function($excel)use($customers)  {
                 $excel->sheet('customers', function($sheet) use($customers) {
                     $sheet->setAllBorders('thin');
-                    $sheet->loadView('admin.export.search_customer_result')
+                    $sheet->loadView('admin.export.customers')
                         ->with('customers', $customers);
                 });
-            })->export($type);
+            })->export('xlsx');
+        \Session::forget('customers');
     }
 }

@@ -56,8 +56,7 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label" for="compose-to">To</label>
                         <div class="col-md-10">
-                            <select name="employee" class="form-control select-chosen">
-                                <option value="">Select Employee</option>
+                            <select name="employees[]" class="form-control select-chosen" multiple>
                                 @foreach($employees as $singleEmployee)
                                     <option value="{{$singleEmployee->id}}" {{$singleEmployee->id == old('employee') ? 'selected' : ''}}>
                                         {{$singleEmployee->name}} [{{$singleEmployee->level->title}}]

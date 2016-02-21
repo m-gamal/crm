@@ -52,18 +52,18 @@
                         <div class="col-md-10">
                             <select name="month" class="form-control select-chosen">
                                 <option value="">Select Month</option>
-                                <option value="Jan">Jan</option>
-                                <option value="Feb">Feb</option>
-                                <option value="Mar">Mar</option>
-                                <option value="Apr">Apr</option>
-                                <option value="May">May</option>
-                                <option value="Jun">Jun</option>
-                                <option value="Jul">Jul</option>
-                                <option value="Aug">Aug</option>
-                                <option value="Sep">Sep</option>
-                                <option value="Oct">Oct</option>
-                                <option value="Nov">Nov</option>
-                                <option value="Dec">Dec</option>
+                                <option value="Jan" @if(date('M') == 'Jan') selected @endif >Jan</option>
+                                <option value="Feb" @if(date('M') == 'Feb') selected @endif>Feb</option>
+                                <option value="Mar" @if(date('M') == 'Mar') selected @endif>Mar</option>
+                                <option value="Apr" @if(date('M') == 'Apr') selected @endif>Apr</option>
+                                <option value="May" @if(date('M') == 'May') selected @endif>May</option>
+                                <option value="Jun" @if(date('M') == 'Jun') selected @endif>Jun</option>
+                                <option value="Jul" @if(date('M') == 'Jul') selected @endif>Jul</option>
+                                <option value="Aug" @if(date('M') == 'Aug') selected @endif>Aug</option>
+                                <option value="Sep" @if(date('M') == 'Sep') selected @endif>Sep</option>
+                                <option value="Oct" @if(date('M') == 'Oct') selected @endif>Oct</option>
+                                <option value="Nov" @if(date('M') == 'Nov') selected @endif>Nov</option>
+                                <option value="Dec" @if(date('M') == 'Des') selected @endif>Dec</option>
                             </select>
                             @if($errors->has('month'))
                                 <div class="alert alert-danger">
@@ -76,7 +76,7 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label">Date</label>
                         <div class="col-md-10">
-                            <input type="text" name="date" class="form-control input-datepicker" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd">
+                            <input type="text" name="date" class="form-control input-datepicker" data-date-format="dd-mm-yyy" placeholder="dd-mm-yyyy" value="{{date('d-m-Y')}}">
                             @if($errors->has('date'))
                                 <div class="alert alert-danger">
                                     <i class="fa fa-warning"></i>

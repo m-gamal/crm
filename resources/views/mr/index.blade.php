@@ -1,8 +1,24 @@
 @extends('mr.layouts.master')
 @section('title')
-    Medical Rep. Dashboard
+    {{\Auth::user()->name}} Dashboard
 @endsection
-
+@section('custom_styles')
+    <style>
+        .alert{
+            padding: 24px;
+            border-radius : 12px;
+            -webkit-box-shadow: -7px -2px 9px -3px rgba(0,0,0,0.75);
+            -moz-box-shadow: -7px -2px 9px -3px rgba(0,0,0,0.75);
+            box-shadow: -7px -2px 9px -3px rgba(0,0,0,0.75);
+        }
+        span.announcement {
+            padding-left: 20px;
+            font-size: 16px;
+            font-family: monospace;
+            align-content: flex-start;
+        }
+    </style>
+@endsection
 @section('content')
 
     <!-- Dashboard Header -->
@@ -48,6 +64,18 @@
     </div>
     <!-- END Dashboard Header -->
     <div class="row">
+        @foreach($announcements as $singleAnnouncement)
+            <div class="form-group">
+                <div class="alert alert-danger alert-dismissable">
+                    <p>
+                        <i class="fa fa-bullhorn fa-2x"></i>
+                        <span class="announcement">{{$singleAnnouncement->text}}</span>
+                    </p>
+                </div>
+            </div>
+        @endforeach
+    </div>
+    <div class="row">
         <!-- Input Grid Block -->
         <div class="block">
             <!-- Input Grid Title -->
@@ -77,6 +105,12 @@
                                 Reports
                             </a>
                         </li>
+                        <li>
+                            <a href="#follows_up_tab">
+                                <i class="fa fa-pencil"></i>
+                                Follows Up
+                            </a>
+                        </li>
                     </ul>
                 </div>
 
@@ -100,74 +134,111 @@
                                         <a href="#class" data-toggle="tab"> By Class </a>
                                     </li>
                                     <li>
-                                        <a href="#speciality" tabindex="-1" data-toggle="tab"> By Speciality </a>
+                                        <a href="#speciality" data-toggle="tab"> By Speciality </a>
                                     </li>
                                 </ul>
                             </div>
                             <div class="col-md-9">
-                                <div class="tab-pane active" id="class">
-                                    <div class="block full">
-                                        <div class="block-title">
-                                            <h2><strong>Total Monthly</strong> Coverage</h2>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="alert alert-info alert-dismissable text-center">
-                                                <i class="fa fa-check"></i>
-                                                <b>
-                                                    You have achieved {{$actualVisitsCount}}
-                                                    visits from {{$totalVisitsCount}} visits
-                                                </b>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="class">
+                                        <div class="block full">
+                                            <div class="block-title">
+                                                <h2><strong>Total Monthly</strong> Coverage</h2>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="alert alert-info alert-dismissable text-center">
+                                                    <i class="fa fa-check"></i>
+                                                    <b>
+                                                        You have achieved {{$actualVisitsCount}}
+                                                        visits from {{$totalVisitsCount}} visits
+                                                    </b>
+                                                </div>
+                                            </div>
+                                            <div class="pie-chart block-section" data-percent="{{$totalMonthlyCoverage}}" data-size="200">
+                                                <span>{{$totalMonthlyCoverage}} %</span>
                                             </div>
                                         </div>
-                                        <div class="pie-chart block-section" data-percent="{{$totalMonthlyCoverage}}" data-size="200">
-                                            <span>{{$totalMonthlyCoverage}} %</span>
-                                        </div>
                                     </div>
-                                </div>
-                                <div class="tab-pane fade" id="speciality">
-                                    <!-- Pie Chart Block -->
-                                    <div class="block full">
-                                        <!-- Pie Chart Title -->
-                                        <div class="block-title">
-                                            <h2><strong>Pie</strong> Chart</h2>
-                                        </div>
-                                        <!-- END Pie Title -->
+                                    <div class="tab-pane" id="speciality">
+                                        <!-- Pie Chart Block -->
+                                        <div class="block full">
+                                            <!-- Pie Chart Title -->
+                                            <div class="block-title">
+                                                <h2><strong>Total Monthly Coverage</strong> By Speciality</h2>
+                                            </div>
+                                            <!-- END Pie Title -->
 
-                                        <!-- Pie Chart Content -->
-                                        <div id="chart-pie" class="chart">
+                                            <!-- Pie Chart Content -->
+                                            <div id="chart-pie" class="chart">
 
+                                            </div>
+                                            <!-- END Pie Chart Content -->
                                         </div>
-                                        <!-- END Pie Chart Content -->
+                                        <!-- END Pie Chart Block -->
                                     </div>
-                                    <!-- END Pie Chart Block -->
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- END Coverage -->
+
                     <div class="tab-pane" id="report_tab">
                         <div class="block-content-full">
                             <div class="table-responsive">
-                                <table id="example-table" class="table table-vcenter table-condensed table-bordered">
+                                <table class="example-datatable table table-vcenter table-condensed table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th class="class-text">#</th>
+                                        <th class="text-center">Date</th>
+                                        <th class="text-center">Doctor</th>
+                                        <th class="text-center">Follow Up</th>
+                                        <th class="text-center">Double Visits</th>
+                                        <th class="text-center">Total Product Sold Price</th>
+                                        <th class="text-center">Is Planned ?</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @if(count($monthlyReports) > 0)
+                                        @foreach($monthlyReports as $singleReport)
+                                            <tr>
+                                                <td class="text-center"><a href="{{URL::route('singleReport', $singleReport->id)}}">{{$singleReport->id}}</a></td>
+                                                <td class="text-center">{{$singleReport->date}}</td>
+                                                <td class="text-center">{{$singleReport->doctor->name}}</td>
+                                                <td class="text-center">{{$singleReport->follow_up}}</td>
+                                                <td class="text-center">{{ !empty($singleReport->double_visit_manager_id) ? \App\Employee::findOrFail($singleReport->double_visit_manager_id)->name : 'N/A' }}</td>
+                                                <td class="text-center">{{$singleReport->total_sold_products_price}}</td>
+                                                <td class="text-center">{!! $singleReport->is_planned !!}</td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="follows_up_tab">
+                        <div class="block-content-full">
+                            <div class="table-responsive">
+                                <table class="example-datatable table table-vcenter table-condensed table-bordered">
                                     <thead>
                                     <tr>
                                         <th class="text-center">#</th>
                                         <th class="text-center">Date</th>
-                                        <th class="text-center">Description Name</th>
-                                        <th class="text-center">Doctor </th>
-                                        <th class="text-center">Is Planned ? </th>
+                                        <th class="text-center">Doctor</th>
+                                        <th class="text-center">Follow Up</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($monthlyReports as $singleReport)
-                                        <tr>
-                                            <td class="text-center">{{$singleReport->id}}</td>
-                                            <td class="text-center">{{$singleReport->date}}</td>
-                                            <td class="text-center">{{$singleReport->doctor->description_name}}</td>
-                                            <td class="text-center">{{$singleReport->doctor->name}}</td>
-                                            <td class="text-center">{!! $singleReport->is_planned !!}</td>
-                                        </tr>
-                                    @endforeach
+                                    @if(count($monthlyFollowsUp) > 0)
+                                        @foreach($monthlyFollowsUp as $singleReport)
+                                            <tr>
+                                                <td class="text-center"><a href="{{URL::route('singleReport', $singleReport->id)}}">{{$singleReport->id}}</a></td>
+                                                <td class="text-center">{{$singleReport->date}}</td>
+                                                <td class="text-center">{{$singleReport->doctor->name}}</td>
+                                                <td class="text-center">{{$singleReport->follow_up}}</td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -204,4 +275,6 @@ var config = {
         $('#calendar').fullCalendar('render');
     });
 </script>
+    <script src="{{URL::asset('js/pages/tablesDatatables.js')}}"></script>
+    <script>$(function(){ TablesDatatables.init(); });</script>
 @endsection

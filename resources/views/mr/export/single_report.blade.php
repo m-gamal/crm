@@ -1,3 +1,7 @@
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />    
+</head>
+
 <table id="example-datatable" class="table table-vcenter table-condensed table-bordered">
     <thead>
         <tr class="text-center">
@@ -6,13 +10,13 @@
         </tr>
         <tr class="text-center">
             <th>Doctor</th>
-            <td class="text-center">{{$singleReport->doctor->name}}</td>
+            <td class="text-center"  style="font-family: DejaVu Sans, sans-serif;" >{{$singleReport->doctor->name}}</td>
         </tr>
         <tr class="text-center">
             <th>Promoted Products</th>
             @if($singleReport->promotedProducts)
                 @foreach($singleReport->promotedProducts as $singleProduct)
-                    <td class="label label-info">
+                    <td class="label label-info" style="font-family: DejaVu Sans, sans-serif;">
                         {{$singleProduct->product->name}}
                     </td>
                 @endforeach
@@ -22,7 +26,7 @@
             <th>Sample Products</th>
             @if($singleReport->sampleProducts)
                 @foreach($singleReport->sampleProducts as $singleProduct)
-                    <td class="label label-info">
+                    <td class="label label-info" style="font-family: DejaVu Sans, sans-serif;">
                         {{$singleProduct->product->name}}
                     </td>
                 @endforeach
@@ -32,7 +36,7 @@
             <th>Sold Products</th>
             @if($singleReport->soldProducts)
                 @foreach($singleReport->soldProducts as $singleProduct)
-                    <td class="label label-info">
+                    <td class="label label-info" style="font-family: DejaVu Sans, sans-serif;">
                         {{$singleProduct->product->name}} [{{$singleProduct->quantity}} Units]
                     </td>
                 @endforeach
@@ -42,7 +46,7 @@
             <th>Gifts</th>
             @if($singleReport->gift)
                 @foreach($singleReport->gift as $singleGift)
-                    <td class="label label-info">
+                    <td class="label label-info" style="font-family: DejaVu Sans, sans-serif;">
                         {{$singleGift->gift->name}}
                     </td>
                 @endforeach
@@ -54,16 +58,16 @@
         </tr>
         <tr class="text-center">
             <th>Feedback</th>
-            <td class="text-center">{{$singleReport->feedback}}</td>
+            <td class="text-center" style="font-family: DejaVu Sans, sans-serif;">{{$singleReport->feedback}}</td>
         </tr>
         <tr class="text-center">
             <th>Follow Up</th>
-            <td class="text-center">{{$singleReport->follow_up}}</td>
+            <td class="text-center" style="font-family: DejaVu Sans, sans-serif;">{{$singleReport->follow_up}}</td>
         </tr>
         <tr class="text-center">
             <th>Double Visit</th>
-            <td class="text-center">
-                {!! $singleReport->double_visit_manger_id != NULL ? $singleReport->double_visit_manger_id : "<i>N/A</i>" !!}
+            <td class="text-center" style="font-family: DejaVu Sans, sans-serif;">
+                {!! !is_null($singleReport->double_visit_manager_id) ? \App\Employee::findOrFail($singleReport->double_visit_manager_id)->name : "<i>N/A</i>" !!}
             </td>
         </tr>
     </thead>

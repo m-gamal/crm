@@ -32,4 +32,9 @@ class ExpenseReportHotel extends Model
     {
         return \Carbon\Carbon::parse($date)->format('d-m-Y');
     }
+
+    public function setDateAttribute($date)
+    {
+        $this->attributes['date'] = \Carbon\Carbon::parse($date)->format('Y-m-d');
+    }
 }

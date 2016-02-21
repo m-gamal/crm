@@ -32,8 +32,8 @@ class SaleController extends Controller
     public function doSearch(SalesSearchRequest $request)
     {
         $productSales   =   [];
-        $from           =   $request->date_from;
-        $to             =   $request->date_to;
+        $from           =   date('Y-m-d', strtotime($request->date_from));
+        $to             =   date('Y-m-d', strtotime($request->date_to));
         $product        =   $request->product;
         $doctor         =   $request->doctor;
 

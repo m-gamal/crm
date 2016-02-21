@@ -25,9 +25,9 @@
                 Form::open([
                 'route'     =>  'doSalesSearch',
                 'id'        =>  'sales_search',
-                'role' 		=> 	'form',
-                'method' 	=> 	'post',
-                'class'		=>	'form-horizontal form-bordered'
+                'role'   =>  'form',
+                'method'  =>  'post',
+                'class'  => 'form-horizontal form-bordered'
                 ])
                 !!}
 
@@ -43,7 +43,7 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label">Date From</label>
                     <div class="col-md-10">
-                        <input type="text" name="date_from" class="form-control input-datepicker" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd">
+                        <input type="text" name="date_from" class="form-control input-datepicker" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy">
                         @if($errors->has('date_from'))
                             <div class="alert alert-danger">
                                 <i class="fa fa-warning"></i>
@@ -56,7 +56,7 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label">Date To</label>
                     <div class="col-md-10">
-                        <input type="text" name="date_to" class="form-control input-datepicker" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd">
+                        <input type="text" name="date_to" class="form-control input-datepicker" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy">
                         @if($errors->has('date_to'))
                             <div class="alert alert-danger">
                                 <i class="fa fa-warning"></i>

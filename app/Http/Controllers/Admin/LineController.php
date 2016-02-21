@@ -149,6 +149,9 @@ class LineController extends Controller
             'mr'                            =>  $mr,
             'month'                         =>  $month
         ];
+
+        \Session::set('customers', $doctors);
+
         return view('admin.line.single', $dataView);
     }
 

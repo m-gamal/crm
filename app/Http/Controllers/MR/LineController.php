@@ -61,7 +61,7 @@ class LineController extends Controller
         $actualVisits               =   [];
         $MonthlyCustomerProducts    =   [];
 
-        $doctors                    =   Customer::where('mr_id', \Auth::user()->id)->get();;
+        $doctors                    =   Customer::where('mr_id', \Auth::user()->id)->get();
 
         foreach($doctors as $singleDoctor)
         {
@@ -94,6 +94,9 @@ class LineController extends Controller
             'totalSoldProductsSales'        =>  $totalSoldProductsSales,
             'totalSoldProductsSalesPrice'   =>  $totalSoldProductsSalesPrice,
         ];
+
+        \Session::set('customers', $doctors);
+
         return view('mr.line.single', $dataView);
     }
 

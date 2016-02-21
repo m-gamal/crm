@@ -32,4 +32,9 @@ class Announcement extends Model
     {
         return \Carbon\Carbon::parse($date)->format('d-m-Y');
     }
+
+    public function setStartAttribute($date)
+    {
+        $this->attributes['start'] = \Carbon\Carbon::parse($date)->format('Y-m-d');
+    }
 }

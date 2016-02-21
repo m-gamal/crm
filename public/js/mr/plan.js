@@ -12,5 +12,6 @@ $('#calendar').fullCalendar({
     firstDay: 6,
     hiddenDays: [ 4, 5 ],
     events: config.routes[0].plan,
+    eventOrder: 'color',
     defaultView : 'month'
 });

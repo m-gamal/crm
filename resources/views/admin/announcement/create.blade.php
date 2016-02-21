@@ -74,7 +74,7 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label">Display Start Date</label>
                         <div class="col-md-10">
-                            <input type="text" id="example-datepicker" name="start" class="form-control input-datepicker" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd" value="{{ old('start') }}">
+                            <input type="text" id="example-datepicker" name="start" class="form-control input-datepicker" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" value="{{ old('start') }}">
 
                             @if($errors->has('start'))
                                 <div class="alert alert-danger">

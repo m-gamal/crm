@@ -166,7 +166,7 @@ All Expenses Reports
                                 <tr>
                                     <td class="text-center">{{$singleMeeting->date}}</td>
                                     <td class="text-center">{{$singleMeeting->meeting}}</td>
-                                    <td class="text-center">{{$singleMeeting->meeting_cost}}</td>
+                                    <td class="text-center">{{$singleMeeting->cost}}</td>
                                 </tr>
                             @endforeach
                             </tbody>
